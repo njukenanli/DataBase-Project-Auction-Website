@@ -23,9 +23,9 @@ York Tseng: upload the ER diagram and the logical design.
 This is a brief introduction of our project framework according to our discussion.
 
 ## Entity-Relationship Diagram ##
-![ER Diagram](./Database_ER_diagram.png)
+![ER Diagram](./materials/Database_ER_diagram.png)
 
 ## Logical Design ##
-![Logical Design](./Logical_Design.png)
+![Logical Design](./materials/Logical_Design.png)
 
 
