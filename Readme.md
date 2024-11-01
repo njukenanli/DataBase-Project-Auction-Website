@@ -26,6 +26,6 @@ This is a brief introduction of our project framework according to our discussio
 ![ER Diagram](./Database_ER_diagram.png)
 
 ## Logical Design ##
-![Logical Design](./Logical_Design.pdf)
+![Logical Design](./Logical_Design.png)
 
 
