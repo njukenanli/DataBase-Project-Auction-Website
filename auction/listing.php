@@ -5,14 +5,34 @@
   // Get info from the URL:
   $item_id = $_GET['item_id'];
 
-  // TODO: Use item_id to make a query to the database.
-
-  // DELETEME: For now, using placeholder data.
-  $title = "Placeholder title";
-  $description = "Description blah blah blah";
-  $current_price = 30.50;
-  $num_bids = 1;
-  $end_time = new DateTime('2020-11-02T00:00:00');
+  // DONE: Use item_id to make a query to the database.
+  $conn = ConnectDB();
+  $sql =  "CREATE TEMPORARY TABLE HighestBidPrice AS
+          ((SELECT item_ID, MAX(bid_price) AS price, COUNT(buyer_ID) AS num FROM Bid 
+          WHERE item_ID = " . $item_id . " GROUP BY item_ID)
+          UNION
+          (SELECT Item.item_ID, Item.starting_price AS price, 0 AS num FROM Item WHERE 
+          item_ID = " . $item_id
+          . " AND (NOT EXISTS (SELECT Bid.item_ID FROM Bid WHERE Bid.item_ID = Item.item_ID))))";
+  if ($conn->query($sql) === FALSE) {
+    die("Excution Failure: " . $conn->error);
+  } 
+  $sql = "SELECT Category.name AS title, Item.description AS description, 
+          HighestBidPrice.price AS current_price, HighestBidPrice.num AS num_bids, 
+          Item.end_date AS end_date FROM Item, HighestBidPrice, Category 
+          WHERE Item.item_ID = HighestBidPrice.item_ID AND Category.category_ID = Item.category_ID";
+  $result = $conn->query($sql);
+  if ($result->num_rows === 1) {
+    $row = $result->fetch_assoc();
+    $title = $row["title"];
+    $description = $row["description"];
+    $current_price = floatval($row["current_price"]);
+    $num_bid = intval($row["num_bids"]);
+    $end_time = new DateTime($row["end_date"]);
+  }
+  else {
+    die("Wrong number of results:" . $result->num_rows);
+  }
 
   // TODO: Note: Auctions that have ended may pull a different set of data,
   //       like whether the auction ended in a sale or was cancelled due
@@ -25,12 +45,18 @@
     $time_to_end = date_diff($now, $end_time);
     $time_remaining = ' (in ' . display_time_remaining($time_to_end) . ')';
   }
-  
   // TODO: If the user has a session, use it to make a query to the database
   //       to determine if the user is already watching this item.
   //       For now, this is hardcoded.
-  $has_session = true;
+  session_start();
+  $has_session = isset($_SESSION['logged_in']) and $_SESSION['logged_in'];
+  $email = $_SESSION['username'];
   $watching = false;
+  
+  if ($now >= $end_time) {
+
+  }
+  $conn->close();
 ?>
 
 

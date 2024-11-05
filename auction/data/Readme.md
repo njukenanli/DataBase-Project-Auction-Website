@@ -6,3 +6,6 @@ Run CreateDB.php (using XAMPP etc.) to initialize our database, with only the da
 # Data Storage #
 Export your database using XAMPP and upload.
 Synchronize and Import the database from here (using XAMPP etc.).
+
+# Test Data #
+Run TestData.php to insert test data into the empty database.
