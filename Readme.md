@@ -11,6 +11,8 @@ Second Commit
 ----------
 Karina: Implement the codes to create our database and tables.
 
+@ auction/data/
+
 2024.10.31 19:00
 
 Third Commit
@@ -19,13 +21,27 @@ York Tseng: upload the ER diagram and the logical design.
 
 2024.11.02 18:45
 
+
+# Setup #
+
+## Database ##
+Follow the instructions in **auction/data/** to initialize the database.
+
+## Excution ##
+Environemtns with PHP and SQL is required. We used XAMPP as the development env.
+
+Run **auction/index.php** to start the program.
+
 # Program Outline #
-This is a brief introduction of our project framework according to our discussion.
+
+## Introduction ##
+This is a mock auction program running at the server end. 
+The main languages involved are **PHP, SQL, CSS/HTML/JS**.
+
+Our program design strictly follows the Entity-Relationship design and follows the 1st, 2nd and 3rd database normalization requirements, the ERD and logical design details of which are as follows.
 
 ## Entity-Relationship Diagram ##
 ![ER Diagram](./materials/Database_ER_diagram.png)
 
 ## Logical Design ##
 ![Logical Design](./materials/Logical_Design.png)
-
-
