@@ -118,7 +118,7 @@
           . "FROM Item, HighestBidPrice, Category "
           . "WHERE " . join(" AND ", $condition) 
           . $order;
-  echo $sql;
+  //echo $sql;
   $result = $conn->query($sql);
   
   /* For the purposes of pagination, it would also be helpful to know the
