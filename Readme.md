@@ -13,14 +13,19 @@ Karina: Implement the codes to create our database and tables.
 
 2024.10.31 19:00
 
+Third Commit
+----------
+York Tseng: upload the ER diagram and the logical design.
 
-
+2024.11.02 18:45
 
 # Program Outline #
 This is a brief introduction of our project framework according to our discussion.
 
 ## Entity-Relationship Diagram ##
-put ER img file here...
+![ER Diagram](./materials/Database_ER_diagram.png)
 
 ## Logical Design ##
-put Logical Design img file here...
+![Logical Design](./materials/Logical_Design.png)
+
+
