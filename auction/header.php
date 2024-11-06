@@ -1,13 +1,14 @@
 <?php
-  // FIXME: At the moment, I've allowed these values to be set manually.
-  // But eventually, with a database, these should be set automatically
-  // ONLY after the user's login credentials have been verified via a 
-  // database query.
-  session_start();
-  $_SESSION['logged_in'] = false;
-  $_SESSION['account_type'] = 'seller';
-?>
+// 啟動 session，確保只有當 session 尚未啟動時才啟動
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
+if (!isset($_SESSION['logged_in'])) {
+    $_SESSION['logged_in'] = false; // 默認未登錄
+    $_SESSION['account_type'] = ''; // 默認沒有賬戶類型
+}
+?>
 
 <!doctype html>
 <html lang="en">
@@ -25,7 +26,6 @@
   <title>[My Auction Site] <!--CHANGEME!--></title>
 </head>
 
-
 <body>
 
 <!-- Navbars -->
@@ -35,12 +35,12 @@
     <li class="nav-item">
     
 <?php
-  // Displays either login or logout on the right, depending on user's
-  // current status (session).
-  if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
+  // 根據當前 session 狀態顯示 Login 或 Logout 按鈕
+  if ($_SESSION['logged_in'] == true) {
+    echo '<p class="nav-link">Hello, ' . htmlspecialchars($_SESSION['username']) . ' | </p>';
     echo '<a class="nav-link" href="logout.php">Logout</a>';
-  }
-  else {
+  } else {
+    echo '<p class="nav-link">Welcome, unknown user | </p>';
     echo '<button type="button" class="btn nav-link" data-toggle="modal" data-target="#loginModal">Login</button>';
   }
 ?>
@@ -50,25 +50,26 @@
 </nav>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <ul class="navbar-nav align-middle">
-	<li class="nav-item mx-1">
+    <li class="nav-item mx-1">
       <a class="nav-link" href="browse.php">Browse</a>
     </li>
 <?php
-  if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'buyer') {
-  echo('
-	<li class="nav-item mx-1">
+  // 根據賬戶類型顯示不同的導航選項
+  if ($_SESSION['account_type'] == 'buyer') {
+    echo('
+    <li class="nav-item mx-1">
       <a class="nav-link" href="mybids.php">My Bids</a>
     </li>
-	<li class="nav-item mx-1">
+    <li class="nav-item mx-1">
       <a class="nav-link" href="recommendations.php">Recommended</a>
     </li>');
   }
-  if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller') {
-  echo('
-	<li class="nav-item mx-1">
+  if ($_SESSION['account_type'] == 'seller') {
+    echo('
+    <li class="nav-item mx-1">
       <a class="nav-link" href="mylistings.php">My Listings</a>
     </li>
-	<li class="nav-item ml-3">
+    <li class="nav-item ml-3">
       <a class="nav-link btn border-light" href="create_auction.php">+ Create auction</a>
     </li>');
   }
@@ -84,6 +85,7 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Login</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
       <!-- Modal body -->
@@ -91,11 +93,11 @@
         <form method="POST" action="login_result.php">
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="text" class="form-control" id="email" placeholder="Email">
+            <input type="text" class="form-control" id="email" name="email" placeholder="Email" required>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
           </div>
           <button type="submit" class="btn btn-primary form-control">Sign in</button>
         </form>
@@ -105,3 +107,10 @@
     </div>
   </div>
 </div> <!-- End modal -->
+
+<!-- Bootstrap and jQuery JavaScript -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
