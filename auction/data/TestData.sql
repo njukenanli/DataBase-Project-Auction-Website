@@ -1,11 +1,11 @@
 INSERT INTO Buyer (email, password)
-VALUES ('example1@example.com', '000000000000000000000000000000000000000000000000000000000000');
+VALUES ('example1@example.com', '$2y$10$mekZWXnyyEKoaO3MkGZsd.uviTyLBfoVdoce7djHPIHqPPPa9xNeW');
 INSERT INTO Seller (email, password)
-VALUES ('example1@example.com', '000000000000000000000000000000000000000000000000000000000000');
+VALUES ('example1@example.com', '$2y$10$mekZWXnyyEKoaO3MkGZsd.uviTyLBfoVdoce7djHPIHqPPPa9xNeW');
 INSERT INTO Buyer (email, password)
-VALUES ('example2@example.com', '000000000000000000000000000000000000000000000000000000000000');
+VALUES ('example2@example.com', '$2y$10$mekZWXnyyEKoaO3MkGZsd.uviTyLBfoVdoce7djHPIHqPPPa9xNeW');
 INSERT INTO Seller (email, password)
-VALUES ('example2@example.com', '000000000000000000000000000000000000000000000000000000000000');
+VALUES ('example2@example.com', '$2y$10$mekZWXnyyEKoaO3MkGZsd.uviTyLBfoVdoce7djHPIHqPPPa9xNeW');
 
 INSERT INTO Category (name)
 VALUES ("china");

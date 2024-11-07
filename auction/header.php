@@ -92,6 +92,13 @@ if (!isset($_SESSION['logged_in'])) {
       <div class="modal-body">
         <form method="POST" action="login_result.php">
           <div class="form-group">
+            <label for="role">Role</label>
+            <select class="form-control" id="role" name="role">
+              <option selected value="buyer">Buyer</option>
+              <option value="seller">Seller</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="email">Email</label>
             <input type="text" class="form-control" id="email" name="email" placeholder="Email" required>
           </div>
