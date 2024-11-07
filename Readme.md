@@ -31,7 +31,7 @@ Jiayi:
 
 Sixth Commit
 ----------
-Karina: modify header.php to make it able to choose between buyer and seller. modify login_result.php to make it more consice and add hash_password function.
+Karina: modify header.php to make it able to choose between buyer and seller. modify login_result.php to make it more consice and safe and add hash_password function.
 
 2024.11.08 23:00
 
