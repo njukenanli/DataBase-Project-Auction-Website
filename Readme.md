@@ -21,6 +21,19 @@ York Tseng: upload the ER diagram and the logical design.
 
 2024.11.02 18:45
 
+Fourth Commit
+----------
+York Tseng:
+
+Fifth Commit
+----------
+Jiayi:
+
+Sixth Commit
+----------
+Karina: modify header.php to make it able to choose between buyer and seller. modify login_result.php to make it more consice and add hash_password function.
+
+2024.11.08 23:00
 
 # Setup #
 
