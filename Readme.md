@@ -1,11 +1,31 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
 
-First Commit 
+Sixth Commit
 ----------
-Karina: Create the project on GitHub. Commit the starter code from moodle.
+Karina: modify header.php to make it able to choose between buyer and seller. modify login_result.php to make it more consice and safe and add hash_password function.
 
-2024.10.16 17:00
+Finish all the TODO comments @ browse.php, listing.php and watchlist_fuc.php
+
+Users can now browse, select and sort all the auctions, see details of an auction, and add/remove items to/from watching list. 
+
+TODO: Add email functions. Add functions to automatically end an auction when the deadline arrives. 
+
+2024.11.09 20:00
+
+Fifth Commit
+----------
+Jiayi:
+
+Fourth Commit
+----------
+York Tseng:
+
+Third Commit
+----------
+York Tseng: upload the ER diagram and the logical design.
+
+2024.11.02 18:45
 
 Second Commit 
 ----------
@@ -15,25 +35,12 @@ Karina: Implement the codes to create our database and tables.
 
 2024.10.31 19:00
 
-Third Commit
+First Commit 
 ----------
-York Tseng: upload the ER diagram and the logical design.
+Karina: Create the project on GitHub. Commit the starter code from moodle.
 
-2024.11.02 18:45
+2024.10.16 17:00
 
-Fourth Commit
-----------
-York Tseng:
-
-Fifth Commit
-----------
-Jiayi:
-
-Sixth Commit
-----------
-Karina: modify header.php to make it able to choose between buyer and seller. modify login_result.php to make it more consice and safe and add hash_password function.
-
-2024.11.08 23:00
 
 # Setup #
 

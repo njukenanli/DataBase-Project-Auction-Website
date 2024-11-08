@@ -70,4 +70,8 @@ function ConnectDB(){
   return $conn;
 }
 
+function email($receiver, $email, $title, $message){
+  //TODO
+}
+
 ?>

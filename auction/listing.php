@@ -33,10 +33,6 @@
   else {
     die("Wrong number of results:" . $result->num_rows);
   }
-
-  // TODO: Note: Auctions that have ended may pull a different set of data,
-  //       like whether the auction ended in a sale or was cancelled due
-  //       to lack of high-enough bids. Or maybe not.
   
   // Calculate time to auction end:
   $now = new DateTime();
@@ -45,18 +41,25 @@
     $time_to_end = date_diff($now, $end_time);
     $time_remaining = ' (in ' . display_time_remaining($time_to_end) . ')';
   }
-  // TODO: If the user has a session, use it to make a query to the database
+  // DONE: If the user has a session, use it to make a query to the database
   //       to determine if the user is already watching this item.
-  //       For now, this is hardcoded.
-  session_start();
-  $has_session = isset($_SESSION['logged_in']) and $_SESSION['logged_in'];
-  $email = $_SESSION['username'];
-  $watching = false;
-  
-  if ($now >= $end_time) {
-
+  $has_session = (isset($_SESSION['logged_in']) and $_SESSION['logged_in']);
+  if ($has_session) {
+    $email = $_SESSION['username'];
+    $sql =  "SELECT * FROM Watch, Buyer WHERE Watch.item_ID = " . $item_id 
+    . " AND Watch.buyer_ID = Buyer.user_ID AND Buyer.email = '" . $email . "'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0){
+      $watching = true;
+    }
+    else{
+      $watching = false;
+    }
   }
-  $conn->close();
+  else {
+    $email =  '';
+    $watching = false;
+  }
 ?>
 
 
@@ -91,16 +94,64 @@
     </div>
 
   </div>
+<div class="col-sm-8"> <!-- Left col with item info -->
+
+  <div class="itemDescription">
+
+<?php
+if ($now >= $end_time) {
+  // DONE: Note: Auctions that have ended may pull a different set of data,
+  //       like whether the auction ended in a sale or was cancelled due
+  //       to lack of high-enough bids.
+  $sql = "SELECT reserve_price FROM Item WHERE item_ID = " . $item_id;
+  $result = $conn->query($sql);
+  if ($result->num_rows === 1){
+    $reserve_prive = $result->fetch_assoc()["reserve_price"];
+    if ($num_bid > 0 and $current_price >= $reserve_prive){
+      echo "<br>A deal has been made on this item.<br>";
+      echo "Final deal price: £" . $current_price . "<br>";
+      $sql = "SELECT Buyer.user_ID, Buyer.email FROM Bid, Buyer 
+      WHERE Buyer.user_ID = Bid.buyer_ID AND 
+      Bid.bid_price = " . $current_price . " AND Bid.item_ID = " . $item_id;
+      $result = $conn->query($sql);
+      if ($result->num_rows === 1){
+        $buyer = $result->fetch_assoc();
+        $id = $buyer["user_ID"];
+        $email = $buyer["email"];
+        echo "Auction winner: No. " . $id . ", email: ". $email . "<br>";
+      }
+      else{
+        die("Wrong number of results:" . $result->num_rows);
+      }
+    }
+    else {
+      echo "<br>Auction ended. The item failed to make a deal.<br>";
+    }
+  }
+  else{
+    die("Wrong number of results:" . $result->num_rows);
+  }
+
+}
+?>
+
+  </div>
+
+</div>
 
   <div class="col-sm-4"> <!-- Right col with bidding info -->
 
     <p>
-<?php if ($now > $end_time): ?>
-     This auction ended <?php echo(date_format($end_time, 'j M H:i')) ?>
-     <!-- TODO: Print the result of the auction here? -->
+<!-- DONE: Print the result of the auction here -->
+<?php 
+if ($now >= $end_time) :
+    echo "This auction ended at ";
+    echo(date_format($end_time, 'j M H:i')) ;
+  ?>
 <?php else: ?>
      Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p>  
     <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
+    <p class="lead">Bid number: <?php echo($num_bid) ?></p>
 
     <!-- Bidding form -->
     <form method="POST" action="place_bid.php">
@@ -121,7 +172,10 @@
 
 
 
-<?php include_once("footer.php")?>
+<?php 
+$conn->close();
+include_once("footer.php");
+?>
 
 
 <script> 
@@ -146,10 +200,14 @@ function addToWatchlist(button) {
           $("#watch_nowatch").hide();
           $("#watch_watching").show();
         }
+        else if (objT == "unlogged") {
+          alert("Add to watch failed. Please log in first.");
+        }
+        else if (objT == "seller") {
+          alert("Add to watch failed. This service is only for buyer. Please re-log in as a buyer first.");
+        }
         else {
-          var mydiv = document.getElementById("watch_nowatch");
-          mydiv.appendChild(document.createElement("br"));
-          mydiv.appendChild(document.createTextNode("Add to watch failed. Try again later."));
+          alert("Add to watch failed. Please try again later.");
         }
       },
 
@@ -178,10 +236,14 @@ function removeFromWatchlist(button) {
           $("#watch_watching").hide();
           $("#watch_nowatch").show();
         }
+        else if (objT == "unlogged") {
+          alert("Watch removal failed. Please log in first.");
+        }
+        else if (objT == "seller") {
+          alert("Watch removal failed. This service is only for buyer. Please re-log in as a buyer first.");
+        }
         else {
-          var mydiv = document.getElementById("watch_watching");
-          mydiv.appendChild(document.createElement("br"));
-          mydiv.appendChild(document.createTextNode("Watch removal failed. Try again later."));
+          alert("Watch removal failed. Try again later.");
         }
       },
 

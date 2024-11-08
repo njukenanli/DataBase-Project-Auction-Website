@@ -48,5 +48,6 @@ CREATE TABLE Watch (
 CREATE TABLE Comment (
     item_ID INT(6) UNSIGNED PRIMARY KEY,
     comment VARCHAR(200),
+    rating DECIMAL(2,1),
     FOREIGN KEY (item_ID) REFERENCES Item(item_id)
 )

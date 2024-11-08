@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("refresh:5;url=index.php");
         }
     }
-    elseif ($role == "seller") {
+    elseif ($role === "seller") {
         $sql = "SELECT user_ID, password FROM seller WHERE email = '".$email."'";
         $result = $conn->query($sql);
 

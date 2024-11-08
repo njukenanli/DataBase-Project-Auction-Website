@@ -37,9 +37,13 @@ INSERT INTO Bid (bid_time, buyer_ID, item_ID, bid_price)
 VALUES ("2024-10-05", 1, 2, 10.0);
 INSERT INTO Bid (bid_time, buyer_ID, item_ID, bid_price)
 VALUES ("2022-10-05", 1, 2, 10.0);
+INSERT INTO Bid (bid_time, buyer_ID, item_ID, bid_price)
+VALUES ("2022-06-05", 2, 7, 10.0);
+INSERT INTO Bid (bid_time, buyer_ID, item_ID, bid_price)
+VALUES ("2022-06-05", 1, 7, 30.0);
 
-INSERT INTO Comment (Item_ID, comment)
-VALUES (7, "Very honest seller. The work is authentic!");
+INSERT INTO Comment (Item_ID, comment, rating)
+VALUES (7, "Very honest seller. The work is authentic!", 4.5);
 
 INSERT INTO Watch (buyer_ID, item_ID)
 VALUES (1, 5)
