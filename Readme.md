@@ -7,11 +7,11 @@ Karina:
 
 Comment Function Completed!
 
-Buyers (should log in first) who won the auction can make comments and ratings on the deal they made. 
+A Buyer (should log in first) who won the auction can make a comment and a rating on the deal they made. 
 
 Other Users are able to see the comment on a sold item.
 
-Other Users are able to see all the comments on a seller's items sold and the average rating of a seller's items sold by clicking the url on the listing page which shows the detials of an item.
+Other Users are able to see all the comments on a seller's items sold and the average rating of a seller's items sold by clicking the url on the listing page which shows the details of an item.
 
 2024.11.09 17:00
 
