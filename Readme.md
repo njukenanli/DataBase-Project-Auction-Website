@@ -1,6 +1,21 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
 
+Seventh Commit
+----------
+Karina:
+
+Comment Function Completed!
+
+Buyers (should log in first) who won the auction can make comments and ratings on the deal they made. 
+
+Other Users are able to see the comment on a sold item.
+
+Other Users are able to see all the comments on a seller's items sold and the average rating of a seller's items sold by clicking the url on the listing page which shows the detials of an item.
+
+2024.11.09 17:00
+
+
 Sixth Commit
 ----------
 Karina: modify header.php to make it able to choose between buyer and seller. modify login_result.php to make it more consice and safe and add hash_password function.
@@ -11,7 +26,7 @@ Users can now browse, select and sort all the auctions, see details of an auctio
 
 TODO: Add email functions. Add functions to automatically end an auction when the deadline arrives. 
 
-2024.11.09 20:00
+2024.11.08 20:00
 
 Fifth Commit
 ----------
@@ -44,12 +59,13 @@ Karina: Create the project on GitHub. Commit the starter code from moodle.
 
 # Setup #
 
+## Environemnt ##
+An environment with PHP and SQL is required. We used XAMPP as the development env.
+
 ## Database ##
 Follow the instructions in **auction/data/** to initialize the database.
 
 ## Excution ##
-Environemtns with PHP and SQL is required. We used XAMPP as the development env.
-
 Run **auction/index.php** to start the program.
 
 # Program Outline #
@@ -65,3 +81,27 @@ Our program design strictly follows the Entity-Relationship design and follows t
 
 ## Logical Design ##
 ![Logical Design](./materials/Logical_Design.png)
+
+## Core Functionality Implemented ##
+⚪ 1. Users can register with the system and create accounts. Users have roles of seller or buyer with different privileges.
+
+⚪ 2. Sellers can create auctions for particular items, setting suitable 
+conditions and features of the items including the item description, categorisation, starting price, reserve price and end date.
+
+√ 3. Buyers can search the system for particular kinds of item being auctioned and can browse and visually re-arrange listings of items within categories.
+
+⚪ 4. Buyers can bid for items and see the bids other users make as they are received. The system will manage the auction until the set end time and award the item to the highest bidder. The system should confirm to both the winner and seller of an auction its outcome.
+
+⚪ E5. Buyers can watch auctions on items and receive emailed updates on bids on those items including notifications when they are outbid.
+
+⚪ E6. Buyers can receive recommendations for items to bid on based on collaborative filtering (i.e., ‘you might want to bid on the sorts of things other people, who have also bid on the sorts of things you have previously bid on, are currently bidding on).
+
+**Extra Functions:**
+
+√ E7. 
+
+Buyers who won the auction can make comments and ratings on the deal they made. 
+
+Other Users are able to see the comment on a sold item.
+
+Other Users are able to see all the comments on a seller's items sold and the average rating of a seller's items sold.

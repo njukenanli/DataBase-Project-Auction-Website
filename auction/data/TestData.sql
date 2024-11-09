@@ -28,6 +28,8 @@ INSERT INTO Item (description, seller_ID, category_ID, starting_price, reserve_p
 VALUES ('Italian sculpture.', 1, 3, 20.0, 22.0, "2026-09-08");
 INSERT INTO Item (description, seller_ID, category_ID, starting_price, reserve_price, end_date)
 VALUES ('French painting.', 1, 2, 20.0, 22.0, "2022-09-08");
+INSERT INTO Item (description, seller_ID, category_ID, starting_price, reserve_price, end_date)
+VALUES ('Austria painting.', 1, 2, 20.0, 22.0, "2022-09-08");
 
 INSERT INTO Bid (bid_time, buyer_ID, item_ID, bid_price)
 VALUES ("2024-10-04", 1, 1, 24.0);
@@ -41,9 +43,13 @@ INSERT INTO Bid (bid_time, buyer_ID, item_ID, bid_price)
 VALUES ("2022-06-05", 2, 7, 10.0);
 INSERT INTO Bid (bid_time, buyer_ID, item_ID, bid_price)
 VALUES ("2022-06-05", 1, 7, 30.0);
+INSERT INTO Bid (bid_time, buyer_ID, item_ID, bid_price)
+VALUES ("2022-06-05", 2, 8, 30.0);
 
-INSERT INTO Comment (Item_ID, comment, rating)
+INSERT INTO Comment (item_ID, comment, rating)
 VALUES (7, "Very honest seller. The work is authentic!", 4.5);
+INSERT INTO Comment (item_ID, comment, rating)
+VALUES (8, "Very delicate painting, which is worth the price!", 4.0);
 
 INSERT INTO Watch (buyer_ID, item_ID)
 VALUES (1, 5)

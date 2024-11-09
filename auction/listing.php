@@ -105,6 +105,7 @@ if ($now >= $end_time) {
   //       to lack of high-enough bids.
   $sql = "SELECT reserve_price FROM Item WHERE item_ID = " . $item_id;
   $result = $conn->query($sql);
+  $deal = false;
   if ($result->num_rows === 1){
     $reserve_prive = $result->fetch_assoc()["reserve_price"];
     if ($num_bid > 0 and $current_price >= $reserve_prive){
@@ -117,8 +118,9 @@ if ($now >= $end_time) {
       if ($result->num_rows === 1){
         $buyer = $result->fetch_assoc();
         $id = $buyer["user_ID"];
-        $email = $buyer["email"];
-        echo "Auction winner: No. " . $id . ", email: ". $email . "<br>";
+        $winner = $buyer["email"];
+        echo "Auction winner: No. " . $id . ", email: ". $winner . "<br>";
+        $deal = true;
       }
       else{
         die("Wrong number of results:" . $result->num_rows);
@@ -131,7 +133,33 @@ if ($now >= $end_time) {
   else{
     die("Wrong number of results:" . $result->num_rows);
   }
+}
 
+// EXTRA FUNCTION IMPLEMENTED:
+// Seller Rating and URL to All Comments of This Seller.
+$sql = "SELECT seller_ID FROM Item WHERE item_ID = ". $item_id;
+$result = $conn->query($sql);
+if ($result->num_rows === 1) {
+  $seller_id = $result->fetch_assoc()["seller_ID"];
+}
+else {
+  die("Wrong number of results:" . $result->num_rows);
+}
+$sql = "SELECT Comment.rating FROM Comment, Item 
+        WHERE Item.seller_ID = ". $seller_id
+        . " AND Comment.item_ID = Item.item_ID";
+$result = $conn->query($sql);
+$sum = 0.0;
+$num = $result->num_rows;
+if ($num > 0) {
+  while($row = $result->fetch_assoc()) {
+    $sum += $row["rating"];
+  }
+  echo "<br>The average rating for this seller is: " . number_format($sum/$num, 2) . "/5.00, " . $num . " comment(s). <br>";
+  echo '<div class="p-2 mr-5"><h5><a href="extra_func/comment.php?seller_id=' . $seller_id . "&item_id=" . $item_id . '"> Click here to see more comments about this seller... </a></h5></div><br>';
+}
+else {
+  echo "<br>No comment about this seller yet...<br>";
 }
 ?>
 
@@ -147,6 +175,57 @@ if ($now >= $end_time) {
 if ($now >= $end_time) :
     echo "This auction ended at ";
     echo(date_format($end_time, 'j M H:i')) ;
+    //EXTRA FUNCTION IMPLEMENTED:
+    //The comment made by the buyer who won this item.
+    //If the user logged in is the buyer who won this item, provide a form to them to alter comments.
+    //An empty comment would be created automatically after a deal is made. 
+    //So the form is to change the comment only.
+    if ($deal === true){
+      $sql = "SELECT rating, comment FROM Comment WHERE item_ID = " . $item_id;
+      $result = $conn->query($sql);
+      if ($result->num_rows === 1) {
+        $com = $result->fetch_assoc();
+        $rating = $com["rating"];
+        $comment = $com["comment"];
+        echo "<br><br> Comment from buyer who won the item:<br>";
+        echo "Rating: " . $rating . "<br>";
+        echo $comment . "<br>";
+        if ($has_session) {
+            if ($email === $winner) {
+              echo "<br>You are the winner of this auction, you can edit comment here!<br>";
+              echo '<form method="post" action="extra_func/process_comment.php">
+                    <div class="form-group">
+                      <label>item_id:</label>
+                      <select class="form-control" id="item_id" name="item_id">
+                        <option selected value="' . $item_id . '">' . $item_id . '</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Rate this deal from 0~5:</label>
+                      <div class="input-group w-100">
+                        <input type="number" class="form-control" id="rating" name="rating" min="0" max="5" step="0.1" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      Comment (no more than 200 characters) :
+                      <div class="input-group w-100">
+                        <textarea class="form-control" id="comment" name="comment" rows="5" maxlength="200"></textarea>
+                      </div>
+                    </div>
+                    <div class="col-md-1 px-0">
+                      <button type="submit" class="btn btn-primary">Edit Comment</button>
+                    </div>';
+            
+          }
+        }
+      }
+      else {
+        die("Wrong number of results:" . $result->num_rows);
+      }
+    }
+    else {
+      echo "Unfortunately, the item failed to get a high enough bid...";
+    }
   ?>
 <?php else: ?>
      Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p>  

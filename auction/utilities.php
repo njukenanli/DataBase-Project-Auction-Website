@@ -61,8 +61,8 @@ function print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time)
   );
 }
 
-function ConnectDB(){
-  $config = json_decode(file_get_contents('data/config.json'), true);
+function ConnectDB($con_dir = "data/config.json"){
+  $config = json_decode(file_get_contents($con_dir), true);
   $conn = new mysqli($config["servername"], $config["username"], $config["password"], $config["dbname"]);
   if ($conn->connect_error) {
     die("Connection Failure: " . $conn->connect_error);
