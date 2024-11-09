@@ -13,6 +13,8 @@ Other Users are able to see the comment on a sold item.
 
 Other Users are able to see all the comments on a seller's items sold and the average rating of a seller's items sold by clicking the url on the listing page which shows the details of an item.
 
+@ listing.php, extra_func/comment.php, extra_func/process_comment.php
+
 2024.11.09 17:00
 
 
