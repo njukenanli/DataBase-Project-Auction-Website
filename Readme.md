@@ -10,6 +10,7 @@ York:
 3. Complemented the content of the Fourth Commit.
 
 2024.11.11 1:07
+
 Seventh Commit
 ----------
 Karina:
@@ -62,6 +63,7 @@ the function is related to the do in header.php as the following cotnet
   // database query.
 
 2024.11.11 12:36
+
 Third Commit
 ----------
 York Tseng: upload the ER diagram and the logical design.
