@@ -1,11 +1,15 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
+
+
 Eighth Commit
 ----------
-York :  1/ add the register function in the register.php & process_register.php
-2/ add a register botton next to login botton on the main webpage and it also can call the registration function
-3/ complement with the content of Fourth Commit 
+York:
+1. Added the registration function in `register.php` and `process_register.php`.
+2. Added a register button next to the login button on the main webpage, which can also call the registration function.
+3. Complemented the content of the Fourth Commit.
 
+2024.11.11 1:07
 Seventh Commit
 ----------
 Karina:
@@ -42,7 +46,7 @@ Jiayi:
 Fourth Commit
 ----------
 York Tseng: 
-1/ Finish login related function in the login result.php
+1. Finish login related function in the login result.php
 Thanks to Karina's help the password can Extract $_POST variables
 finish the request as the following content 
 // TODO: Extract $_POST variables, check they're OK, and attempt to login.
@@ -50,13 +54,14 @@ finish the request as the following content
 
 // For now, I will just set session variables and redirect.
 
-2/ modify some parts in header.php in order to to compare the user login password with the database we created 
+2. modify some parts in header.php in order to to compare the user login password with the database we created 
 the function is related to the do in header.php as the following cotnet
   // FIXME: At the moment, I've allowed these values to be set manually.
   // But eventually, with a database, these should be set automatically
   // ONLY after the user's login credentials have been verified via a 
   // database query.
 
+2024.11.11 12:36
 Third Commit
 ----------
 York Tseng: upload the ER diagram and the logical design.
