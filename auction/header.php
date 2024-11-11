@@ -1,13 +1,12 @@
 <?php
-// 啟動 session，確保只有當 session 尚未啟動時才啟動
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
 if (!isset($_SESSION['logged_in'])) {
-    $_SESSION['logged_in'] = false; // 默認未登錄
+    $_SESSION['logged_in'] = false; 
     $_SESSION['username'] = '';
-    $_SESSION['account_type'] = ''; // 默認沒有賬戶類型
+    $_SESSION['account_type'] = ''; 
 }
 ?>
 
@@ -33,16 +32,18 @@ if (!isset($_SESSION['logged_in'])) {
 <nav class="navbar navbar-expand-lg navbar-light bg-light mx-2">
   <a class="navbar-brand" href="#">Mock Auction Website by Group 25, Database Project</a>
   <ul class="navbar-nav ml-auto">
-    <li class="nav-item">
+    <li class="nav-item d-flex align-items-center">
     
 <?php
   // 根據當前 session 狀態顯示 Login 或 Logout 按鈕
   if ($_SESSION['logged_in'] == true) {
-    echo '<p class="nav-link">Hello, ' . htmlspecialchars($_SESSION['username']) . ' | </p>';
+    echo '<p class="nav-link mb-0">Hello, ' . htmlspecialchars($_SESSION['username']) . ' | </p>';
     echo '<a class="nav-link" href="logout.php">Logout</a>';
   } else {
-    echo '<p class="nav-link">Welcome, unknown user | </p>';
-    echo '<button type="button" class="btn nav-link" data-toggle="modal" data-target="#loginModal">Login</button>';
+    echo '<p class="nav-link mb-0">Welcome, guest | </p>';
+    echo '<button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#loginModal">Login</button>';
+    // 添加注册按钮，与登录按钮样式保持一致
+    echo '<a href="register.php" class="btn btn-primary ml-2">Register</a>';
   }
 ?>
 
