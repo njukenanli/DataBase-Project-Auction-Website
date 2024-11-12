@@ -1,9 +1,5 @@
 <?php
 
-// TODO: Extract $_POST variables, check they're OK, and attempt to create
-// an account. Notify user of success/failure and redirect/give navigation 
-// options.
-
 require_once("utilities.php");
 
 // Start session if not already started
@@ -39,18 +35,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Connect to the database
     $conn = ConnectDB();
 
-    // Prepare SQL statement based on account type
-    if ($accountType === "buyer") {
-        $sql = "INSERT INTO buyer (email, password) VALUES (?, ?)";
-    } elseif ($accountType === "seller") {
-        $sql = "INSERT INTO seller (email, password) VALUES (?, ?)";
-    } else {
+    // Verify that account type is valid
+    if ($accountType !== "buyer" && $accountType !== "seller") {
         echo('<div class="text-center">Invalid account type. Please try again.</div>');
         header("refresh:5;url=register.php");
+        $conn->close();
         exit();
     }
 
-    // Execute the SQL statement
+    // Check if email already exists in the selected account type table
+    $checkSql = "SELECT email FROM $accountType WHERE email = ?";
+    $checkStmt = $conn->prepare($checkSql);
+    if (!$checkStmt) {
+        die("Prepare failed: (" . $conn->errno . ") " . $conn->error);
+    }
+
+    $checkStmt->bind_param("s", $email);
+    $checkStmt->execute();
+    $checkStmt->store_result();
+
+    // If email exists, display error message and stop execution
+    if ($checkStmt->num_rows > 0) {
+        echo('<div class="text-center">This email is already registered. Please use a different email.</div>');
+        header("refresh:5;url=register.php");
+        $checkStmt->close();
+        $conn->close();
+        exit();
+    }
+    $checkStmt->close();
+
+    // Prepare SQL statement based on account type
+    $sql = "INSERT INTO $accountType (email, password) VALUES (?, ?)";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
         die("Prepare failed: (" . $conn->errno . ") " . $conn->error);
@@ -61,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo('<div class="text-center">Account successfully created! You will be redirected to the login page shortly.</div>');
         header("refresh:5;url=index.php");
     } else {
-        echo('<div class="text-center">Error creating account. This email may already be registered. Please try again.</div>');
+        echo('<div class="text-center">Error creating account. Please try again.</div>');
         header("refresh:5;url=register.php");
     }
 

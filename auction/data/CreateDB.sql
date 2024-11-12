@@ -1,12 +1,12 @@
 CREATE TABLE Seller (
     user_ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    email  VARCHAR(60) NOT NULL,
+    email VARCHAR(60) NOT NULL UNIQUE,
     password VARCHAR(60) NOT NULL
 );
 
 CREATE TABLE Buyer (
     user_ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    email  VARCHAR(60) NOT NULL,
+    email VARCHAR(60) NOT NULL UNIQUE,
     password VARCHAR(60) NOT NULL
 );
 
@@ -20,19 +20,19 @@ CREATE TABLE Item (
     description VARCHAR(60),
     seller_ID INT(6) UNSIGNED,
     category_ID INT(6) UNSIGNED,
-    starting_price DECIMAL(10,2)  NOT NULL,
-    reserve_price DECIMAL(10,2)  NOT NULL,
-    end_date TIMESTAMP  NOT NULL,
+    starting_price DECIMAL(10,2) NOT NULL,
+    reserve_price DECIMAL(10,2) NOT NULL,
+    end_date TIMESTAMP NOT NULL,
     FOREIGN KEY (seller_ID) REFERENCES Seller(user_ID),
     FOREIGN KEY (category_ID) REFERENCES Category(category_ID)
 );
 
 CREATE TABLE Bid (
     bid_ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    bid_time TIMESTAMP  NOT NULL,
+    bid_time TIMESTAMP NOT NULL,
     buyer_ID INT(6) UNSIGNED,
     item_ID INT(6) UNSIGNED,
-    bid_price DECIMAL(10,2)  NOT NULL,
+    bid_price DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (buyer_ID) REFERENCES Buyer(user_ID),
     FOREIGN KEY (item_ID) REFERENCES Item(item_ID)
 );
@@ -50,4 +50,4 @@ CREATE TABLE Comment (
     comment VARCHAR(200),
     rating DECIMAL(2,1),
     FOREIGN KEY (item_ID) REFERENCES Item(item_id)
-)
+);
