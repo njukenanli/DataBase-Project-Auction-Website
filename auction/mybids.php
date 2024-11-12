@@ -30,11 +30,11 @@ $conn = ConnectDB();
 //perform a query to pull up the auctions they've bid on
 $sql = "
 SELECT Item.item_ID, Category.name AS title, Item.description, bid.bid_price, COUNT(Bid.bid_ID) AS num_bids, Item.end_date
-FROM User, Bid, Item, Category
-WHERE User.user_ID = Bid.buyer_ID AND
+FROM Buyer, Bid, Item, Category
+WHERE Buyer.user_ID = Bid.buyer_ID AND
 	Bid.item_ID = Item.item_ID AND
 	Item.category_ID = Category.category_ID AND
-	User.user_ID = ?
+	Buyer.user_ID = ?
 GROUP BY Item.item_ID
 ORDER BY bid_time DESC
 ";
