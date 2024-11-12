@@ -50,4 +50,4 @@ CREATE TABLE Comment (
     comment VARCHAR(200),
     rating DECIMAL(2,1),
     FOREIGN KEY (item_ID) REFERENCES Item(item_id)
-);
+)

@@ -120,7 +120,7 @@ Our program design strictly follows the Entity-Relationship design and follows t
 ![Logical Design](./materials/Logical_Design.png)
 
 ## Core Functionality Implemented ##
-⚪ 1. Users can register with the system and create accounts. Users have roles of seller or buyer with different privileges.
+√ 1. Users can register with the system and create accounts. Users have roles of seller or buyer with different privileges.
 
 ⚪ 2. Sellers can create auctions for particular items, setting suitable 
 conditions and features of the items including the item description, categorisation, starting price, reserve price and end date.

@@ -22,6 +22,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+    // Check if email format is correct
+    if (!preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/",$email)) {
+        echo('<div class="text-center">Email format is wrong. Please try again.</div>');
+        header("refresh:5;url=register.php");
+        exit();
+    }
+
     // Check if passwords match
     if ($password !== $passwordConfirmation) {
         echo('<div class="text-center">Passwords do not match. Please try again.</div>');
@@ -32,16 +39,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Hash the password
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // Connect to the database
-    $conn = ConnectDB();
-
     // Verify that account type is valid
     if ($accountType !== "buyer" && $accountType !== "seller") {
         echo('<div class="text-center">Invalid account type. Please try again.</div>');
         header("refresh:5;url=register.php");
-        $conn->close();
         exit();
     }
+
+    // Connect to the database
+    $conn = ConnectDB();
 
     // Check if email already exists in the selected account type table
     $checkSql = "SELECT email FROM $accountType WHERE email = ?";
@@ -57,9 +63,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // If email exists, display error message and stop execution
     if ($checkStmt->num_rows > 0) {
         echo('<div class="text-center">This email is already registered. Please use a different email.</div>');
-        header("refresh:5;url=register.php");
         $checkStmt->close();
         $conn->close();
+        header("refresh:5;url=register.php");
         exit();
     }
     $checkStmt->close();
@@ -74,14 +80,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ss", $email, $hashedPassword);
     if ($stmt->execute()) {
         echo('<div class="text-center">Account successfully created! You will be redirected to the login page shortly.</div>');
+        $stmt->close();
+        $conn->close();
         header("refresh:5;url=index.php");
     } else {
         echo('<div class="text-center">Error creating account. Please try again.</div>');
+        $stmt->close();
+        $conn->close();
         header("refresh:5;url=register.php");
     }
-
-    $stmt->close();
-    $conn->close();
 } else {
     // If not accessed via POST method
     echo('<div class="text-center">Invalid request method. You will be redirected shortly.</div>');
