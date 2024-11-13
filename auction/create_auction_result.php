@@ -1,31 +1,23 @@
-//This function takes the form data and adds the new auction to the database.
-
-/* TODO #1: Connect to MySQL database (perhaps by requiring a file that
-            already does this). */
-
-/* TODO #2: Extract form data into variables. Because the form was a 'post'
-            form, its data can be accessed via $POST['auctionTitle'], 
-            $POST['auctionDetails'], etc. Perform checking on the data to
-            make sure it can be inserted into the database. If there is an
-            issue, give some semi-helpful feedback to user. */
-
-/* TODO #3: If everything looks good, make the appropriate call to insert
-            data into the database. */
-            
-// If all is successful, let user know.
 <?php
 include_once("header.php");
 require("utilities.php");
 
-// 开启会话，以确保能够访问会话变量
-session_start();
+// Open a session to ensure access to session variables
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 echo '<div class="container my-5">';
 
-// 连接到数据库
+// Check whether the user has sales rights
+if (!isset($_SESSION['account_type']) || $_SESSION['account_type'] !== 'seller') {
+    die("Only sellers can create auctions.");
+}
+
+// Connect to database
 $conn = ConnectDB();
 
-// 提取并验证表单数据
+// Extract form data
 $title = $_POST['auctionTitle'] ?? '';
 $details = $_POST['auctionDetails'] ?? '';
 $category_name = $_POST['auctionCategory'] ?? '';
@@ -33,12 +25,31 @@ $starting_price = $_POST['auctionStartPrice'] ?? 0;
 $reserve_price = $_POST['auctionReservePrice'] ?? 0;
 $end_date = $_POST['auctionEndDate'] ?? '';
 
-// 检查必填字段
+// Check required fields
 if (empty($title) || empty($category_name) || empty($starting_price) || empty($end_date)) {
     die("Please fill in all required fields.");
 }
 
-// 获取 category_ID
+// Handle image upload
+$image_path = null;
+if (isset($_FILES['auctionImage']) && $_FILES['auctionImage']['error'] == UPLOAD_ERR_OK) {
+    $targetDir = "uploads/";  // Directory where the image will be saved
+    $targetFilePath = $targetDir . basename($_FILES["auctionImage"]["name"]);
+    
+    // Create the uploads directory if it doesn't exist
+    if (!is_dir($targetDir)) {
+        mkdir($targetDir, 0755, true);
+    }
+
+    // Move the uploaded file to the target directory
+    if (move_uploaded_file($_FILES["auctionImage"]["tmp_name"], $targetFilePath)) {
+        $image_path = $targetFilePath;
+    } else {
+        die("Error uploading the image.");
+    }
+}
+
+// Get category_ID
 $category_query = "SELECT category_ID FROM Category WHERE name = ?";
 $stmt = $conn->prepare($category_query);
 $stmt->bind_param("s", $category_name);
@@ -50,18 +61,25 @@ if (!$category_id) {
     die("Invalid category selected.");
 }
 
-// 检查用户是否具有销售权限
-if (!isset($_SESSION['account_type']) || $_SESSION['account_type'] !== 'seller') {
-    die("Only sellers can create auctions.");
+// Get user ID from session based on username
+$username = $_SESSION['username'];
+$query = "SELECT user_ID FROM Seller WHERE email = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$seller_id = $user['user_ID'];
+
+if (!$seller_id) {
+    die("User ID not found.");
 }
 
-$seller_id = $_SESSION['user_id']; // 假设用户 ID 存储在会话中
-
-// 插入新拍卖记录
-$insert_query = "INSERT INTO Item (description, seller_ID, category_ID, starting_price, reserve_price, end_date) 
-                 VALUES (?, ?, ?, ?, ?, ?)";
+// Insert new auction record, including image_path
+$insert_query = "INSERT INTO Item (description, seller_ID, category_ID, starting_price, reserve_price, end_date, image_path) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($insert_query);
-$stmt->bind_param("siidds", $title, $seller_id, $category_id, $starting_price, $reserve_price, $end_date);
+$stmt->bind_param("siiddss", $title, $seller_id, $category_id, $starting_price, $reserve_price, $end_date, $image_path);
 
 if ($stmt->execute()) {
     echo '<div class="text-center">Auction successfully created! <a href="mylistings.php">View your new listing.</a></div>';
@@ -69,9 +87,9 @@ if ($stmt->execute()) {
     echo "Error creating auction: " . $stmt->error;
 }
 
-// 关闭数据库连接
+// Close database connection
 $conn->close();
 echo '</div>';
-?>
 
-<?php include_once("footer.php"); ?>
+include_once("footer.php");
+?>
