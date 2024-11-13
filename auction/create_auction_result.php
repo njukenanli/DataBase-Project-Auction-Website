@@ -76,10 +76,10 @@ if (!$seller_id) {
 }
 
 // Insert new auction record, including image_path
-$insert_query = "INSERT INTO Item (description, seller_ID, category_ID, starting_price, reserve_price, end_date, image_path) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?)";
+$insert_query = "INSERT INTO Item (title, description, seller_ID, category_ID, starting_price, reserve_price, end_date, image_path) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($insert_query);
-$stmt->bind_param("siiddss", $title, $seller_id, $category_id, $starting_price, $reserve_price, $end_date, $image_path);
+$stmt->bind_param("ssiiddss", $title, $details, $seller_id, $category_id, $starting_price, $reserve_price, $end_date, $image_path);
 
 if ($stmt->execute()) {
     echo '<div class="text-center">Auction successfully created! <a href="mylistings.php">View your new listing.</a></div>';

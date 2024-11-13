@@ -112,7 +112,7 @@ else {
 }
 
 // Use the above values to construct a query statement
-$sql = "SELECT Item.item_ID AS item_id, Category.name AS title, 
+$sql = "SELECT Item.item_ID AS item_id, Item.title AS title, 
         Item.description AS description, HighestBidPrice.price AS current_price, 
         HighestBidPrice.num AS num_bids, Item.end_date AS end_date "
         . "FROM Item, HighestBidPrice, Category "

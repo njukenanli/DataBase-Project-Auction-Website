@@ -17,10 +17,10 @@
   if ($conn->query($sql) === FALSE) {
     die("Excution Failure: " . $conn->error);
   } 
-  $sql = "SELECT Category.name AS title, Item.description AS description, 
+  $sql = "SELECT Item.title AS title, Item.description AS description, 
           HighestBidPrice.price AS current_price, HighestBidPrice.num AS num_bids, 
-          Item.end_date AS end_date FROM Item, HighestBidPrice, Category 
-          WHERE Item.item_ID = HighestBidPrice.item_ID AND Category.category_ID = Item.category_ID";
+          Item.end_date AS end_date FROM Item, HighestBidPrice 
+          WHERE Item.item_ID = HighestBidPrice.item_ID";
   $result = $conn->query($sql);
   if ($result->num_rows === 1) {
     $row = $result->fetch_assoc();

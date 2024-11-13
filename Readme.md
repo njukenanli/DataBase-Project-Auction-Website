@@ -1,13 +1,16 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
 
-Tenth commit
+11th commit
 ----------
-JIayi Chen:
+Jiayi Chen:
 1. Completed the tasks of creating three files, create_auction,create_auction_result,mylistings. Sellers can create their own products and see information in mylistenings
 
 2. Added the field 'image_path' in the item table to store the path of uploaded photos, which can be viewed in the 'uploads' file
 
+10th commit
+----------
+Anqi Liu: mybids.php DONE
 
 
 Ninth Commit
@@ -57,9 +60,13 @@ TODO: Add email functions. Add functions to automatically end an auction when th
 
 2024.11.08 20:00
 
+
 Fifth Commit
 ----------
-Jiayi:
+Jiayi: functions to create auctions for sellers.
+
+2024.11.07
+
 
 Fourth Commit
 ----------
@@ -128,10 +135,10 @@ Our program design strictly follows the Entity-Relationship design and follows t
 ## Logical Design ##
 ![Logical Design](./materials/Logical_Design.png)
 
-## Core Functionality Implemented ##
+## Core Functionality of this program ##
 √ 1. Users can register with the system and create accounts. Users have roles of seller or buyer with different privileges.
 
-⚪ 2. Sellers can create auctions for particular items, setting suitable 
+√ 2. Sellers can create auctions for particular items, setting suitable 
 conditions and features of the items including the item description, categorisation, starting price, reserve price and end date.
 
 √ 3. Buyers can search the system for particular kinds of item being auctioned and can browse and visually re-arrange listings of items within categories.
@@ -151,3 +158,10 @@ Buyers who won the auction can make comments and ratings on the deal they made.
 Other Users are able to see the comment on a sold item.
 
 Other Users are able to see all the comments on a seller's items sold and the average rating of a seller's items sold.
+
+⚪ E8. 
+
+Sellers can add pictures to the items they sell when creating auctions.
+
+Users can see the pictures of the items (if available) in the listing.php by clicking the items in the index page.
+
