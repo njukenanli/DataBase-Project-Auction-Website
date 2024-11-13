@@ -17,7 +17,7 @@ CREATE TABLE Category (
 
 CREATE TABLE Item (
     item_ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(60),
+    title VARCHAR(30) NOT NULL,
     description VARCHAR(60),
     seller_ID INT(6) UNSIGNED,
     category_ID INT(6) UNSIGNED,
