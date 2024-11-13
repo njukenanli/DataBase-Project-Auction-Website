@@ -23,6 +23,7 @@ CREATE TABLE Item (
     starting_price DECIMAL(10,2) NOT NULL,
     reserve_price DECIMAL(10,2) NOT NULL,
     end_date TIMESTAMP NOT NULL,
+    image_path VARCHAR(255),
     FOREIGN KEY (seller_ID) REFERENCES Seller(user_ID),
     FOREIGN KEY (category_ID) REFERENCES Category(category_ID)
 );
