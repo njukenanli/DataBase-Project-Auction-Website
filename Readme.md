@@ -4,7 +4,7 @@ When committing each time, please add a note of the changes here. This would bec
 Tenth commit
 ----------
 JIayi Chen:
-1. Completed the tasks of creating three files, creating an instruction, creating an instruction result, and mylistenings. Sellers can create their own products and see information in mylistenings
+1. Completed the tasks of creating three files, create_auction,create_auction_result,mylistings. Sellers can create their own products and see information in mylistenings
 
 2. Added the field 'image_path' in the item table to store the path of uploaded photos, which can be viewed in the 'uploads' file
 
