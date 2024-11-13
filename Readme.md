@@ -147,7 +147,7 @@ conditions and features of the items including the item description, categorisat
 
 ⚪ E5. Buyers can watch auctions on items and receive emailed updates on bids on those items including notifications when they are outbid.
 
-⚪ E6. Buyers can receive recommendations for items to bid on based on collaborative filtering (i.e., ‘you might want to bid on the sorts of things other people, who have also bid on the sorts of things you have previously bid on, are currently bidding on).
+✅ E6. Buyers can receive recommendations for items to bid on based on collaborative filtering (i.e., ‘you might want to bid on the sorts of things other people, who have also bid on the sorts of things you have previously bid on, are currently bidding on).
 
 **Extra Functions:**
 
