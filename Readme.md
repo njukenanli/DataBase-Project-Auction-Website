@@ -1,5 +1,9 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
+12th commit
+----------
+Jiayi Chen:
+Fixed some presentation bugs
 
 11th commit
 ----------
