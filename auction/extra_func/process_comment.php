@@ -29,5 +29,5 @@ if (isset($_POST['comment']) and isset($_POST['rating']) and isset($_POST['item_
 else {
     echo "Comment or user information is missing. Redirecting...";
 }
-header("refresh:5;url=../index.php");
+header("refresh:5;url=../../index.php");
 ?>

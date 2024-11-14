@@ -147,7 +147,8 @@ else {
 }
 $sql = "SELECT Comment.rating FROM Comment, Item 
         WHERE Item.seller_ID = ". $seller_id
-        . " AND Comment.item_ID = Item.item_ID";
+        . " AND Comment.item_ID = Item.item_ID  
+        AND Comment.rating >= 0.0";
 $result = $conn->query($sql);
 $sum = 0.0;
 $num = $result->num_rows;
@@ -160,6 +161,18 @@ if ($num > 0) {
 }
 else {
   echo "<br>No comment about this seller yet...<br>";
+}
+
+echo "<br><br>Bidding History:<br>";
+$sql = "SELECT bid_time, buyer_ID, bid_price FROM Bid WHERE item_ID = $item_id ORDER BY bid_time DESC";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+  while($row = $result->fetch_assoc()) {
+    echo "Bid time: " . $row["bid_time"] . ", Buyer No." . $row["buyer_ID"] . ", bid_price: £" . $row["bid_price"] . "<br>";
+  }
+}
+else {
+  echo "No bid found...";
 }
 ?>
 
@@ -188,7 +201,7 @@ if ($now >= $end_time) :
         $rating = $com["rating"];
         $comment = $com["comment"];
         echo "<br><br> Comment from buyer who won the item:<br>";
-        echo "Rating: " . $rating . "<br>";
+        if ($rating>=0.0) {echo "Rating: " . $rating . "<br>";}
         echo $comment . "<br>";
         if ($has_session) {
             if ($email === $winner) {
@@ -219,12 +232,15 @@ if ($now >= $end_time) :
           }
         }
       }
+      elseif ($result->num_rows === 0) {
+        echo "<br>This auction is being processed by the system and the comment function has not been opened...Please wait for several minutes...<br>";
+      }
       else {
         die("Wrong number of results:" . $result->num_rows);
       }
     }
     else {
-      echo "Unfortunately, the item failed to get a high enough bid...";
+      echo "<br>Unfortunately, the item failed to get a high enough bid...";
     }
   ?>
 <?php else: ?>

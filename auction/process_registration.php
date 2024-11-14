@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo('<div class="text-center">Account successfully created! You will be redirected to the login page shortly.</div>');
         $stmt->close();
         $conn->close();
-        header("refresh:5;url=index.php");
+        header("refresh:5;url=../index.php");
     } else {
         echo('<div class="text-center">Error creating account. Please try again.</div>');
         $stmt->close();

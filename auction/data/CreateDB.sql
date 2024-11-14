@@ -25,6 +25,7 @@ CREATE TABLE Item (
     reserve_price DECIMAL(10,2) NOT NULL,
     end_date TIMESTAMP NOT NULL,
     image_path VARCHAR(255),
+    processed BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (seller_ID) REFERENCES Seller(user_ID),
     FOREIGN KEY (category_ID) REFERENCES Category(category_ID)
 );
@@ -49,7 +50,7 @@ CREATE TABLE Watch (
 
 CREATE TABLE Comment (
     item_ID INT(6) UNSIGNED PRIMARY KEY,
-    comment VARCHAR(200),
-    rating DECIMAL(2,1),
+    comment VARCHAR(200) DEFAULT 'No comment yet...',
+    rating DECIMAL(2,1) DEFAULT -1.0,
     FOREIGN KEY (item_ID) REFERENCES Item(item_id)
 )

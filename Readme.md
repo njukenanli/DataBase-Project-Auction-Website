@@ -1,6 +1,21 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
 
+14th commit
+----------
+Karina: 
+
+Finished the codes to automatically end an auction. See auction/back_stage_proc for details. Waiting for the email function to be completed to fully realize the function.
+
+Addition to an omission: add bidding history to listing.php according to hw requirements.
+
+Note that index.py has been moved out of the auction directory to make the codes more layered.
+
+2024.11.15 8:40
+
+13th commit
+----------
+Anqi: filled TODO in mybids.php, place_bid.php, recommendations.php. Haven't tested the codes yet.
 
 12th commit
 ----------
@@ -125,7 +140,9 @@ An environment with PHP and SQL is required. We used XAMPP as the development en
 Follow the instructions in **auction/data/** to initialize the database.
 
 ## Excution ##
-Run **auction/index.php** to start the program.
+Run **auction/back_stage_proc/transaction.php** first at the back stage to start a serving process to end the auctions automatically at the set time. See more information in **[auction/back_stage_proc/readme.md](auction/back_stage_proc/readme.md)**.
+
+Run **index.php** to start the program.
 
 # Program Outline #
 
@@ -153,7 +170,7 @@ conditions and features of the items including the item description, categorisat
 
 ⚪ E5. Buyers can watch auctions on items and receive emailed updates on bids on those items including notifications when they are outbid.
 
-✅ E6. Buyers can receive recommendations for items to bid on based on collaborative filtering (i.e., ‘you might want to bid on the sorts of things other people, who have also bid on the sorts of things you have previously bid on, are currently bidding on).
+√ E6. Buyers can receive recommendations for items to bid on based on collaborative filtering (i.e., ‘you might want to bid on the sorts of things other people, who have also bid on the sorts of things you have previously bid on, are currently bidding on).
 
 **Extra Functions:**
 
