@@ -9,8 +9,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['account_type'] != 'buyer'){
 	exit();
 }
 
-#get the current user's id
-$user_ID = $_SESSION['username'];
+#get the current user's email
+$user_email = $_SESSION['username'];
 ?>
 
 <div class="container">
@@ -29,19 +29,18 @@ $conn = ConnectDB();
 
 //perform a query to pull up the auctions they've bid on
 $sql = "
-SELECT Item.item_ID, Category.name AS title, Item.description, bid.bid_price, COUNT(Bid.bid_ID) AS num_bids, Item.end_date
+SELECT Bid.bid_ID, Bid.item_ID, Item.description, COUNT(bid_ID) AS num_bids, Category.name AS title, MAX(Bid.bid_price) AS bid_price, Item.end_date
 FROM Buyer, Bid, Item, Category
 WHERE Buyer.user_ID = Bid.buyer_ID AND
 	Bid.item_ID = Item.item_ID AND
-	Item.category_ID = Category.category_ID AND
-	Buyer.user_ID = ?
-GROUP BY Item.item_ID
-ORDER BY bid_time DESC
-";
+    Item.category_ID = Category.category_ID AND
+	Buyer.email = ?
+GROUP BY item_ID
+ORDER BY bid_time DESC";
 
 //pre-processing searching results, loop through results
 If ($stmt = $conn->prepare($sql)){
-	$stmt->bind_param("i", $user_ID);
+	$stmt->bind_param("s", $user_email);
 	$stmt->execute();
 
 	//get results
@@ -57,7 +56,6 @@ If ($stmt = $conn->prepare($sql)){
                     	$price = $row['bid_price'];
                     	$num_bids = $row['num_bids'];
                     	$end_time = $row['end_date'];
-			//using printing function in utilities.php
 			print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
 		}
 		echo "</ul>";
@@ -70,7 +68,7 @@ If ($stmt = $conn->prepare($sql)){
 } else {
 	echo "<p>Error querying the database.</p>";
 }
-$conn -> close();
+$conn->close();
 ?>
 </div>
 <?php include_once("footer.php")?>
