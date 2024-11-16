@@ -11,7 +11,8 @@ require("utilities.php");
 
 //checking user's login state
 if(!isset($_SESSION['logged_in']) || $_SESSION['account_type'] != 'buyer'){
-	header("Location: browse.php");
+	echo "Please log in as a buyer first";
+	header("refresh:5;url=../index.php");
 	exit();
 }
 
@@ -73,6 +74,12 @@ if(isset($_POST['item_id']) && isset($_POST['bid'])){
 			$stmt = $conn->prepare($sql);
 			$stmt->bind_param("dii", $bid, $item_id, $user_id);
 			$stmt->execute();
+
+			// outbiddedEmail($item_id, $bid);
+
+			//send emails to those in the watchlist and are watching this item about this new bid
+			watchingEmail($item_id, $bid);
+
 			echo "Bid updated successfully!";
 			header("refresh:5; url=listing.php?item_id=$item_id");
 			exit;
@@ -92,8 +99,7 @@ if(isset($_POST['item_id']) && isset($_POST['bid'])){
 				$stmt->bind_param("ii", $user_id, $item_id);
 				$stmt->execute();
 			
-				//send emails to those outbidded
-				outbiddedEmail($item_id, $bid);
+				//outbiddedEmail($item_id, $bid);
 
 				//send emails to those in the watchlist and are watching this item about this new bid
 				watchingEmail($item_id, $bid);
@@ -173,7 +179,7 @@ function watchingEmail($item_id, $new_price){
 	while($row = $result->fetch_assoc()){
 		$email = $row['email'];
 		$receiver = $row['user_ID'];
-		email($receiver, $email, "Your watching bid has new price", "The $item_id has new price. The current bid price is £$new_price. If you wish to continue to participate in the auction, please bid in time!");
+		email($receiver, $email, "The bid you watch / bid on has a higher price", "The $item_id has new price. The current bid price is £$new_price. If you wish to continue to participate in the auction, please bid with a higher price in time!");
 	}
 }
 
