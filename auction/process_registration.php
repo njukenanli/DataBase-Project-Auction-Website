@@ -7,6 +7,9 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+// 动态获取根路径
+$base_url = dirname($_SERVER['PHP_SELF']);
+
 // Check if POST variables exist and validate them
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Extract and sanitize user-submitted email, password, and account type
@@ -18,21 +21,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if any required fields are empty
     if (empty($accountType) || empty($email) || empty($password) || empty($passwordConfirmation)) {
         echo('<div class="text-center">All fields are required. Please try again.</div>');
-        header("refresh:5;url=register.php");
+        header("refresh:5;url=$base_url/register.php");
         exit();
     }
 
     // Check if email format is correct
-    if (!preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/",$email)) {
+    if (!preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/", $email)) {
         echo('<div class="text-center">Email format is wrong. Please try again.</div>');
-        header("refresh:5;url=register.php");
+        header("refresh:5;url=$base_url/register.php");
         exit();
     }
 
     // Check if passwords match
     if ($password !== $passwordConfirmation) {
         echo('<div class="text-center">Passwords do not match. Please try again.</div>');
-        header("refresh:5;url=register.php");
+        header("refresh:5;url=$base_url/register.php");
         exit();
     }
 
@@ -42,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Verify that account type is valid
     if ($accountType !== "buyer" && $accountType !== "seller") {
         echo('<div class="text-center">Invalid account type. Please try again.</div>');
-        header("refresh:5;url=register.php");
+        header("refresh:5;url=$base_url/register.php");
         exit();
     }
 
@@ -65,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo('<div class="text-center">This email is already registered. Please use a different email.</div>');
         $checkStmt->close();
         $conn->close();
-        header("refresh:5;url=register.php");
+        header("refresh:5;url=$base_url/register.php");
         exit();
     }
     $checkStmt->close();
@@ -82,16 +85,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo('<div class="text-center">Account successfully created! You will be redirected to the login page shortly.</div>');
         $stmt->close();
         $conn->close();
-        header("refresh:5;url=../index.php");
+        header("refresh:5;url=$base_url/index.php");
     } else {
         echo('<div class="text-center">Error creating account. Please try again.</div>');
         $stmt->close();
         $conn->close();
-        header("refresh:5;url=register.php");
+        header("refresh:5;url=$base_url/register.php");
     }
 } else {
     // If not accessed via POST method
     echo('<div class="text-center">Invalid request method. You will be redirected shortly.</div>');
-    header("refresh:5;url=register.php");
+    header("refresh:5;url=$base_url/register.php");
 }
 ?>

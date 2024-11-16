@@ -1,5 +1,12 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
+15th commit
+----------
+Chao-Wei,Tseng:
+
+1. Reparing the bug related to login registeration & logout.
+2. the index.php is now added back to reduce the issues related to redirection.
+
 
 14th commit
 ----------
@@ -36,7 +43,7 @@ Anqi Liu: mybids.php DONE
 
 Ninth Commit
 ----------
-York Tseng:
+Chao-Wei,Tseng:
 1. change the email in buyer and seller to be unique so that the identical email can't register on the website
 2. register function is tested, and it's done
 
@@ -44,7 +51,7 @@ York Tseng:
 
 Eighth Commit
 ----------
-York Tseng:
+Chao-Wei,Tseng:
 1. Added the registration function in `register.php` and `process_register.php`.
 2. Added a register button next to the login button on the main webpage, which can also call the registration function.
 3. Complemented the content of the Fourth Commit.
@@ -91,7 +98,7 @@ Jiayi: functions to create auctions for sellers.
 
 Fourth Commit
 ----------
-York Tseng: 
+Chao-Wei,Tseng:
 1. Finish login related function in the login result.php
 Thanks to Karina's help the password can Extract $_POST variables
 finish the request as the following content 
@@ -112,7 +119,7 @@ the function is related to the do in header.php as the following cotnet
 
 Third Commit
 ----------
-York Tseng: upload the ER diagram and the logical design.
+Chao-Wei,Tseng: upload the ER diagram and the logical design.
 
 2024.11.02 18:45
 
