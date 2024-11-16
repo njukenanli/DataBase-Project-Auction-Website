@@ -19,24 +19,24 @@
 	exit();
 	}
 	
-	//get user's ID
-	$user_id = $_SESSION['user_id'];
+	//get user's email
+	$user_email = $_SESSION['username'];
 	
 	//connect with the database
 	$conn = ConnectDB();
 
-  // TODO: Perform a query to pull up auctions they might be interested in.
-	$sql = "SELECT Item.item_ID, Category.name AS title, Item.description, bid.bid_price, COUNT(Bid.bid_ID) AS num_bids, Item.end_date
+  // DONE: Perform a query to pull up auctions they might be interested in.
+	$sql = "SELECT Item.item_ID, Category.name AS title, Item.description, MAX(Bid.bid_price) AS bid_price, COUNT(Bid.bid_ID) AS num_bids, Item.end_date
 		FROM Bid, Item, Category, Buyer
-		WHERE Bid.item_ID IN (SELECT item_ID FROM Bid WHERE buyer_ID = ?) AND
-      			buyer_id != ? AND
+		WHERE Bid.item_ID IN (SELECT item_ID FROM Bid, Buyer WHERE Buyer.user_ID = Bid.buyer_ID AND Buyer.email = ?) AND
+      			Buyer.email != ? AND
 			Buyer.user_ID = Bid.buyer_ID AND
 			Bid.item_ID = Item.item_ID AND
 			Item.category_ID = Category.category_ID
 		GROUP BY Item.item_ID
-		ORDER BY bid_time DESC";
+		ORDER BY bid_time DESC;";
 	if($stmt = $conn->prepare($sql)){
-		$stmt->bind_param("i", $user_id);
+		$stmt->bind_param("ss", $user_email, $user_email);
 		$stmt->execute();
 
 		//get results
@@ -44,7 +44,7 @@
 		if($result->num_rows > 0){
 			echo "<ul class = 'list-group'>";
 
-			//print out all the results as list items
+			//DONE: print out all the results as list items
 			while($row = $result -> fetch_assoc()){
 				$item_id = $row['item_ID'];
 				$title = $row['title'];
@@ -58,7 +58,7 @@
 		} else {
 			echo "<p> More exciting to come... </p>";
 		}
-		//$stmt -> close();
+		$stmt -> close();
 	} else {
 		echo "<p>Error querying the database.</p>";
 	}
