@@ -123,7 +123,7 @@ if(isset($_POST['item_id']) && isset($_POST['bid'])){
 	} 
 } else {
 	echo "Invalid operation.";
-	header("refresh:5; url=$base_url/index.php");
+	header("refresh:5; url=../index.php");
 	exit;
 }
 $conn->close();

@@ -8,8 +8,6 @@ if (!isset($_SESSION['logged_in'])) {
     $_SESSION['username'] = '';
     $_SESSION['account_type'] = ''; 
 }
-
-$base_url = dirname($_SERVER['PHP_SELF']);
 ?>
 
 <!doctype html>
@@ -19,13 +17,13 @@ $base_url = dirname($_SERVER['PHP_SELF']);
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
   <!-- Bootstrap and FontAwesome CSS -->
-  <link rel="stylesheet" href="<?php echo $base_url; ?>/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <!-- Custom CSS file -->
-  <link rel="stylesheet" href="<?php echo $base_url; ?>/css/custom.css">
+  <link rel="stylesheet" href="css/custom.css">
 
-  <title>[My Auction Site]</title>
+  <title>[My Auction Site] <!--CHANGEME!--></title>
 </head>
 
 <body>
@@ -37,13 +35,15 @@ $base_url = dirname($_SERVER['PHP_SELF']);
     <li class="nav-item d-flex align-items-center">
     
 <?php
+  // 根據當前 session 狀態顯示 Login 或 Logout 按鈕
   if ($_SESSION['logged_in'] == true) {
     echo '<p class="nav-link mb-0">Hello, ' . htmlspecialchars($_SESSION['username']) . ' | </p>';
-    echo '<a class="nav-link" href="' . $base_url . '/logout.php">Logout</a>';
+    echo '<a class="nav-link" href="logout.php">Logout</a>';
   } else {
     echo '<p class="nav-link mb-0">Welcome, guest | </p>';
     echo '<button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#loginModal">Login</button>';
-    echo '<a href="' . $base_url . '/register.php" class="btn btn-primary ml-2">Register</a>';
+    // 添加注册按钮，与登录按钮样式保持一致
+    echo '<a href="register.php" class="btn btn-primary ml-2">Register</a>';
   }
 ?>
 
@@ -53,25 +53,26 @@ $base_url = dirname($_SERVER['PHP_SELF']);
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <ul class="navbar-nav align-middle">
     <li class="nav-item mx-1">
-      <a class="nav-link" href="<?php echo $base_url; ?>/browse.php">Browse</a>
+      <a class="nav-link" href="browse.php">Browse</a>
     </li>
 <?php
+  // 根據賬戶類型顯示不同的導航選項
   if ($_SESSION['account_type'] == 'buyer') {
     echo('
     <li class="nav-item mx-1">
-      <a class="nav-link" href="' . $base_url . '/mybids.php">My Bids</a>
+      <a class="nav-link" href="mybids.php">My Bids</a>
     </li>
     <li class="nav-item mx-1">
-      <a class="nav-link" href="' . $base_url . '/recommendations.php">Recommended</a>
+      <a class="nav-link" href="recommendations.php">Recommended</a>
     </li>');
   }
   if ($_SESSION['account_type'] == 'seller') {
     echo('
     <li class="nav-item mx-1">
-      <a class="nav-link" href="' . $base_url . '/mylistings.php">My Listings</a>
+      <a class="nav-link" href="mylistings.php">My Listings</a>
     </li>
     <li class="nav-item ml-3">
-      <a class="nav-link btn border-light" href="' . $base_url . '/create_auction.php">+ Create auction</a>
+      <a class="nav-link btn border-light" href="create_auction.php">+ Create auction</a>
     </li>');
   }
 ?>
@@ -91,7 +92,7 @@ $base_url = dirname($_SERVER['PHP_SELF']);
 
       <!-- Modal body -->
       <div class="modal-body">
-        <form method="POST" action="<?php echo $base_url; ?>/login_result.php">
+        <form method="POST" action="login_result.php">
           <div class="form-group">
             <label for="role">Role</label>
             <select class="form-control" id="role" name="role">
@@ -109,7 +110,7 @@ $base_url = dirname($_SERVER['PHP_SELF']);
           </div>
           <button type="submit" class="btn btn-primary form-control">Sign in</button>
         </form>
-        <div class="text-center">or <a href="<?php echo $base_url; ?>/register.php">create an account</a></div>
+        <div class="text-center">or <a href="register.php">create an account</a></div>
       </div>
 
     </div>

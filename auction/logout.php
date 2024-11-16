@@ -1,20 +1,14 @@
 <?php
-session_start();
 
+session_start();
 
 unset($_SESSION['logged_in']);
 unset($_SESSION['account_type']);
-
-
-setcookie(session_name(), "", time() - 360, "/");
-
-
+setcookie(session_name(), "", time() - 360);
 session_destroy();
 
 
-$base_url = dirname($_SERVER['PHP_SELF']);
+// Redirect to index
+header("Location: ../index.php");
 
-
-header("Location: $base_url/index.php");
-exit; 
 ?>
