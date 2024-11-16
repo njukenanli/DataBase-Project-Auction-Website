@@ -254,8 +254,9 @@ if ($now >= $end_time) :
         <div class="input-group-prepend">
           <span class="input-group-text">£</span>
         </div>
-	    <input type="number" class="form-control" id="bid">
+        <input type="number" class="form-control" id="bid" name="bid" required>
       </div>
+      <input type="hidden" name = "item_id" value = "<?php echo $item_id; ?>">
       <button type="submit" class="btn btn-primary form-control">Place bid</button>
     </form>
 <?php endif ?>

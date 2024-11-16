@@ -1,8 +1,6 @@
 <?php include_once("header.php");
 require("utilities.php");
 
-session_start();
-
 // DONE: Extract $_POST variables, check they're OK, and attempt to make a bid.
 // Notify user of success/failure and redirect/give navigation options.
 // Can limit valid bids only to those that can outbid the current highest one, otherwise return failure. 
@@ -122,6 +120,8 @@ if(isset($_POST['item_id']) && isset($_POST['bid'])){
 		exit;
 	} 
 } else {
+	//echo (isset($_POST['item_id'])?1:0);
+	//echo (isset($_POST['bid'])?1:0);
 	echo "Invalid operation.";
 	header("refresh:5; url=../index.php");
 	exit;
@@ -141,6 +141,7 @@ function checkExist($user_id, $item_id){
 }
 
 function outbiddedEmail($item_id, $new_price){
+	global $conn;
 	$sql = "SELECT Buyer.email, Buyer.user_ID
 		FROM Buyer, Bid
 		WHERE Bid.bid_price < ? AND
@@ -159,6 +160,7 @@ function outbiddedEmail($item_id, $new_price){
 }
 
 function watchingEmail($item_id, $new_price){
+	global $conn;
 	$sql = "SELECT Buyer.email, Buyer.user_ID
 		FROM Buyer, Watch
 		WHERE Watch.item_ID = ? AND

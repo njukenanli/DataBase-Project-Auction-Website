@@ -40,8 +40,6 @@ VALUES ("2024-10-05", 2, 1, 25.0);
 INSERT INTO Bid (bid_time, buyer_ID, item_ID, bid_price)
 VALUES ("2024-10-05", 1, 2, 10.0);
 INSERT INTO Bid (bid_time, buyer_ID, item_ID, bid_price)
-VALUES ("2022-10-05", 1, 2, 10.0);
-INSERT INTO Bid (bid_time, buyer_ID, item_ID, bid_price)
 VALUES ("2022-06-05", 2, 7, 10.0);
 INSERT INTO Bid (bid_time, buyer_ID, item_ID, bid_price)
 VALUES ("2022-06-05", 1, 7, 30.0);

@@ -71,7 +71,8 @@ function ConnectDB($con_dir = "data/config.json"){
 }
 
 function email($receiver, $email, $title, $message){
-  //TODO
+  echo "email test<br>";
+  echo $receiver . $email . $title . $message;
 }
 
 ?>
