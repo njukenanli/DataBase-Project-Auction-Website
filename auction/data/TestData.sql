@@ -1,11 +1,11 @@
 INSERT INTO Buyer (email, password)
-VALUES ('example1@example.com', '$2y$10$mekZWXnyyEKoaO3MkGZsd.uviTyLBfoVdoce7djHPIHqPPPa9xNeW');
+VALUES ('karinali20011210@gmail.com', '$2y$10$mekZWXnyyEKoaO3MkGZsd.uviTyLBfoVdoce7djHPIHqPPPa9xNeW');
 INSERT INTO Seller (email, password)
-VALUES ('example1@example.com', '$2y$10$mekZWXnyyEKoaO3MkGZsd.uviTyLBfoVdoce7djHPIHqPPPa9xNeW');
+VALUES ('karinali20011210@gmail.com', '$2y$10$mekZWXnyyEKoaO3MkGZsd.uviTyLBfoVdoce7djHPIHqPPPa9xNeW');
 INSERT INTO Buyer (email, password)
-VALUES ('example2@example.com', '$2y$10$mekZWXnyyEKoaO3MkGZsd.uviTyLBfoVdoce7djHPIHqPPPa9xNeW');
+VALUES ('ucabkl5@ucl.ac.uk', '$2y$10$mekZWXnyyEKoaO3MkGZsd.uviTyLBfoVdoce7djHPIHqPPPa9xNeW');
 INSERT INTO Seller (email, password)
-VALUES ('example2@example.com', '$2y$10$mekZWXnyyEKoaO3MkGZsd.uviTyLBfoVdoce7djHPIHqPPPa9xNeW');
+VALUES ('ucabkl5@ucl.ac.uk', '$2y$10$mekZWXnyyEKoaO3MkGZsd.uviTyLBfoVdoce7djHPIHqPPPa9xNeW');
 
 INSERT INTO Category (name)
 VALUES ("china");

@@ -1,6 +1,6 @@
 <?php
 // This file should be run as a scheduled event. Run it independently at the back stage!
-include_once("../utilities.php");
+require_once("../utilities.php");
 $run_interval = 10; //seconds
 function logging ($msg) {
   file_put_contents("log.txt", $msg, FILE_APPEND | LOCK_EX);
@@ -18,19 +18,20 @@ function success($conn, $item_id, $seller_id, $price, $desc) {
         $get_seller = "SELECT email FROM Seller WHERE user_ID = $seller_id";
         $result = $conn->query($get_seller);
         $seller_email = $result->fetch_assoc()["email"];
-        logging('
-        email("Successful Buyer", $buyer_email, "You have won the auction!",
+        logging("success email sent ...\n");
+        send_email($buyer_email, "Successful Buyer", "You have won the auction!",
                 "Dear buyer,\n
                 you have won the item No.$item_id, $desc. \n
                 Please contact seller $seller_email to buy this item. \n
                 You can click this item in the auction website, 
                 go to the item description page, 
-                and make comments about this deal. \n");
-        email("Successful Seller", $seller_email, "Your item has been sold out successfully!",
+                and make comments about this deal. \n",
+                "../email/config.json");
+        send_email($seller_email, "Successful Seller", "Your item has been sold out successfully!",
                 "Dear seller,\n
                 your item No.$item_id, $desc has been sold out to buyer No.$buyer_id, email $buyer_email.\n
-                The buyer will contact you to buy the item.\n");
-        ');
+                The buyer will contact you to buy the item.\n",
+                "../email/config.json");
     }
     else{
         logging("The number of results != 1");
@@ -40,10 +41,10 @@ function failure($conn, $item_id, $seller_id, $desc) {
     $get_seller = "SELECT email FROM Seller WHERE user_ID = $seller_id";
     $result = $conn->query($get_seller);
     $seller_email = $result->fetch_assoc()["email"];
-    logging('
-    email("Seller", $seller_email, "Your auction falied to make a deal",
-    "Dear seller, unfortunately, your auction $item_id, $desc ended without making a deal.\n");
-    ');
+    logging("failure email sent ...\n");
+    send_email($seller_email, "Seller", "Your auction falied to make a deal",
+    "Dear seller, unfortunately, your auction $item_id, $desc ended without making a deal.\n",
+    "../email/config.json");
 }
 
 $conn = ConnectDB("../data/config.json");
@@ -74,6 +75,8 @@ while (true) {
           else {
             failure($conn, $row["item_ID"], $row["seller_ID"], $row["description"]);
           }
+          flush();
+          ob_flush();
           $set_processed = "UPDATE Item 
                             SET processed = TRUE, end_date = end_date  
                             WHERE item_ID =". $row["item_ID"];

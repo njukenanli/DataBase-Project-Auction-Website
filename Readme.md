@@ -1,6 +1,17 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
 
+16th commit
+----------
+Karina:
+
+Moved email codes all into the email directory. Moved all email parameters (address, password etc.) into email/config.json
+
+Modifications to place_bid.php and transaction.php. Now emails can be sent when users place bids / are outbidded / the auction ends.
+
+Compiled the instructions to enable email functions into [auction/email/readme.md](auction/email/readme.md)
+
+2024.11.18 18:00
 
 15th commit
 ----------
@@ -169,6 +180,8 @@ An environment with PHP and SQL is required. We used XAMPP as the development en
 Follow the instructions in **auction/data/** to initialize the database.
 
 ## Excution ##
+To enable the email function, follow **[auction/email/readme.md](auction/email/readme.md)**.
+
 Run **auction/back_stage_proc/transaction.php** first at the back stage to start a serving process to end the auctions automatically at the set time. See more information in **[auction/back_stage_proc/readme.md](auction/back_stage_proc/readme.md)**.
 
 Run **index.php** to start the program.
@@ -195,9 +208,9 @@ conditions and features of the items including the item description, categorisat
 
 √ 3. Buyers can search the system for particular kinds of item being auctioned and can browse and visually re-arrange listings of items within categories.
 
-⚪ 4. Buyers can bid for items and see the bids other users make as they are received. The system will manage the auction until the set end time and award the item to the highest bidder. The system should confirm to both the winner and seller of an auction its outcome.
+√ 4. Buyers can bid for items and see the bids other users make as they are received. The system will manage the auction until the set end time and award the item to the highest bidder. The system should confirm to both the winner and seller of an auction its outcome.
 
-⚪ E5. Buyers can watch auctions on items and receive emailed updates on bids on those items including notifications when they are outbid.
+√ E5. Buyers can watch auctions on items and receive emailed updates on bids on those items including notifications when they are outbid.
 
 √ E6. Buyers can receive recommendations for items to bid on based on collaborative filtering (i.e., ‘you might want to bid on the sorts of things other people, who have also bid on the sorts of things you have previously bid on, are currently bidding on).
 

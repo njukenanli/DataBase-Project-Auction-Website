@@ -46,6 +46,7 @@
   $has_session = (isset($_SESSION['logged_in']) and $_SESSION['logged_in']);
   if ($has_session) {
     $email = $_SESSION['username'];
+    $role = $_SESSION['account_type'];
     $sql =  "SELECT * FROM Watch, Buyer WHERE Watch.item_ID = " . $item_id 
     . " AND Watch.buyer_ID = Buyer.user_ID AND Buyer.email = '" . $email . "'";
     $result = $conn->query($sql);
@@ -59,6 +60,7 @@
   else {
     $email =  '';
     $watching = false;
+    $role = '';
   }
 ?>
 
@@ -203,8 +205,7 @@ if ($now >= $end_time) :
         echo "<br><br> Comment from buyer who won the item:<br>";
         if ($rating>=0.0) {echo "Rating: " . $rating . "<br>";}
         echo $comment . "<br>";
-        if ($has_session) {
-            if ($email === $winner) {
+        if ($has_session and $email === $winner and $role === "buyer") {
               echo "<br>You are the winner of this auction, you can edit comment here!<br>";
               echo '<form method="post" action="extra_func/process_comment.php">
                     <div class="form-group">
@@ -229,7 +230,10 @@ if ($now >= $end_time) :
                       <button type="submit" class="btn btn-primary">Edit Comment</button>
                     </div>';
             
-          }
+          
+        }
+        else {
+          echo "<br><br>The comment section only opens to the winner of this item. If you are the winner, log in as the buyer to make comments on it!<br><br>";
         }
       }
       elseif ($result->num_rows === 0) {
@@ -244,10 +248,11 @@ if ($now >= $end_time) :
     }
   ?>
 <?php else: ?>
-     Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p>  
+  Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p>  
     <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
     <p class="lead">Bid number: <?php echo($num_bid) ?></p>
 
+  <?php if ($role === "buyer"): ?>
     <!-- Bidding form -->
     <form method="POST" action="place_bid.php">
       <div class="input-group">
@@ -259,6 +264,9 @@ if ($now >= $end_time) :
       <input type="hidden" name = "item_id" value = "<?php echo $item_id; ?>">
       <button type="submit" class="btn btn-primary form-control">Place bid</button>
     </form>
+  <?php else: ?>
+    Log in as a buyer to bid for items here...
+  <?php endif ?>
 <?php endif ?>
 
   

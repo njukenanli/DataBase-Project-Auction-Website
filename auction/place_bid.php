@@ -1,6 +1,6 @@
 <?php
 include_once("header.php");
-require("utilities.php");
+require_once("utilities.php");
 
 // DONE: Extract $_POST variables, check they're OK, and attempt to make a bid.
 // Notify user of success/failure and redirect/give navigation options.
@@ -11,7 +11,7 @@ require("utilities.php");
 //Sending email function: email($receiver, $email, $title, $message){}
 
 // Ensure the user is logged in as a buyer
-if (!isset($_SESSION['logged_in']) || $_SESSION['account_type'] != 'buyer') {
+if (!isset($_SESSION['logged_in']) || (!$_SESSION['logged_in']) || $_SESSION['account_type'] != 'buyer') {
     echo "Please log in as a buyer first";
     header("refresh:5;url=../index.php");
     exit();
@@ -85,21 +85,19 @@ if (isset($_POST['item_id']) && isset($_POST['bid'])) {
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("iid", $user_id, $item_id, $bid);
             $stmt->execute();
-
-            // Add the user to the watchlist if not already watching
-            if (!isUserWatching($user_id, $item_id)) {
-                $sql = "INSERT INTO Watch (buyer_ID, item_ID) VALUES (?, ?)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("ii", $user_id, $item_id);
-                $stmt->execute();
-            }
         }
 
-        // Notify users whose bids were exceeded
-        outbiddedEmail($item_id, $bid);
+        // Add the user to the watchlist if not already watching
+        if (!isUserWatching($user_id, $item_id)) {
+            $sql = "INSERT INTO Watch (buyer_ID, item_ID) VALUES (?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ii", $user_id, $item_id);
+            $stmt->execute();
+        }
 
         // Notify users watching this item
-        watchingEmail($item_id, $bid);
+        // including those who have placed bids on this item or added it to their watchlist
+        watchingEmail($item_id, $bid, $user_email);
 
         echo "Bid successfully placed! Redirecting to the listing page...";
         echo "<br><a href='listing.php?item_id=$item_id'>Click here if not redirected automatically.</a>";
@@ -156,29 +154,8 @@ function isUserWatching($user_id, $item_id) {
     return ($result->num_rows > 0);
 }
 
-// Notify users who were outbidded
-function outbiddedEmail($item_id, $new_price) {
-    global $conn;
-    $sql = "SELECT Buyer.email, Buyer.user_ID
-            FROM Buyer, Bid
-            WHERE Bid.bid_price < ? AND Bid.item_ID = ? AND Bid.buyer_ID = Buyer.user_ID";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("di", $new_price, $item_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    while ($row = $result->fetch_assoc()) {
-        $email = $row['email'];
-        $receiver_name = "User " . $row['user_ID'];
-        $subject = "Your bid was exceeded";
-        $message = "Sorry, your bid was exceeded. The current bid price is £$new_price.";
-
-        send_email($email, $receiver_name, $subject, $message);
-    }
-}
-
 // Notify watchers about the new bid
-function watchingEmail($item_id, $new_price) {
+function watchingEmail($item_id, $new_price, $user_email) {
     global $conn;
     $sql = "SELECT Buyer.email, Buyer.user_ID
             FROM Buyer, Watch
@@ -190,11 +167,21 @@ function watchingEmail($item_id, $new_price) {
 
     while ($row = $result->fetch_assoc()) {
         $email = $row['email'];
+        echo $email;
         $receiver_name = "User " . $row['user_ID'];
-        $subject = "New bid on watched item";
-        $message = "The item $item_id has a new bid of £$new_price. Place a higher bid to stay competitive!";
+        if ($email === $user_email) {
+            $subject = "Bid placed successfully";
+            $message = "You have created a bid of £$new_price successfully on item $item_id.\n
+                        If you don't want to receive the notification on this item, go to listing page of this item add remove yourself from the watchlist. ";
+            send_email($email, $receiver_name, $subject, $message);
+        }
+        else{
+            $subject = "New bid on watched item";
+            $message = "The item $item_id has a new bid of £$new_price. Place a higher bid to stay competitive!\n
+                        If you no longer want to receive the notification on this item, go to listing page of this item add remove yourself from the watchlist. ";
 
-        send_email($email, $receiver_name, $subject, $message);
+            send_email($email, $receiver_name, $subject, $message);
+        }
     }
 }
 ?>

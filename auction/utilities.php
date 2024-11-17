@@ -1,5 +1,5 @@
 <?php
-require 'vendor/autoload.php'; // using the composer autoloader
+require 'email/autoload.php'; // using the composer autoloader
 
 use PHPMailer\PHPMailer\PHPMailer; //import phpmailer
 use PHPMailer\PHPMailer\Exception;
@@ -74,27 +74,28 @@ function ConnectDB($con_dir = "data/config.json"){
   return $conn;
 }
 
-function send_email($receiver_email, $receiver_name, $subject, $message_body) {
+function send_email($receiver_email, $receiver_name, $subject, $message, $email_dir = "email/config.json") {
   $mail = new PHPMailer(true);
+  $config = json_decode(file_get_contents($email_dir), true);
 
   try {
       // Server settings
       $mail->isSMTP();
-      $mail->Host = 'smtp.gmail.com'; // Gmail SMTP server
+      $mail->Host = $config["host"]; // Gmail SMTP server
+      $mail->Port = $config["port"];
+      $mail->Username = $config["username"]; // set your email account at email/config.json
+      $mail->Password = $config["password"];   // set your email password at email/config.json
       $mail->SMTPAuth = true;
-      $mail->Username = 'yorkeadgbe@gmail.com'; // 替換為你的 Gmail 地址
-      $mail->Password = '16 digtis password';   // 替換為 Gmail 應用程式密碼
       $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-      $mail->Port = 587;
 
       // Recipients
-      $mail->setFrom('yorkeadgbe@gmail.com', 'Auction Platform'); // 固定發件人
+      $mail->setFrom($config["username"], 'Auction Platform'); // sender
       $mail->addAddress($receiver_email, $receiver_name); 
 
       // Content
       $mail->isHTML(true);
       $mail->Subject = $subject; 
-      $mail->Body    = $message_body; 
+      $mail->Body    = $message; 
 
       $mail->send();
       echo "Email sent to: $receiver_email<br>";
