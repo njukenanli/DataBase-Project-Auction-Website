@@ -1,4 +1,8 @@
 <?php
+require 'vendor/autoload.php'; // using the composer autoloader
+
+use PHPMailer\PHPMailer\PHPMailer; //import phpmailer
+use PHPMailer\PHPMailer\Exception;
 
 // display_time_remaining:
 // Helper function to help figure out what time to display
@@ -70,9 +74,32 @@ function ConnectDB($con_dir = "data/config.json"){
   return $conn;
 }
 
-function email($receiver, $email, $title, $message){
-  echo "email test<br>";
-  echo $receiver . $email . $title . $message;
-}
+function send_email($receiver_email, $receiver_name, $subject, $message_body) {
+  $mail = new PHPMailer(true);
 
+  try {
+      // Server settings
+      $mail->isSMTP();
+      $mail->Host = 'smtp.gmail.com'; // Gmail SMTP server
+      $mail->SMTPAuth = true;
+      $mail->Username = 'yorkeadgbe@gmail.com'; // 替換為你的 Gmail 地址
+      $mail->Password = '16 digtis password';   // 替換為 Gmail 應用程式密碼
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+      $mail->Port = 587;
+
+      // Recipients
+      $mail->setFrom('yorkeadgbe@gmail.com', 'Auction Platform'); // 固定發件人
+      $mail->addAddress($receiver_email, $receiver_name); 
+
+      // Content
+      $mail->isHTML(true);
+      $mail->Subject = $subject; 
+      $mail->Body    = $message_body; 
+
+      $mail->send();
+      echo "Email sent to: $receiver_email<br>";
+  } catch (Exception $e) {
+      echo "Email could not be sent. Mailer Error: {$mail->ErrorInfo}<br>";
+  }
+}
 ?>

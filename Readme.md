@@ -1,5 +1,32 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
+15th commit
+----------
+
+Chao-Wei:
+1. change several parts within place_bid.php, uitilities.php, and added a file called vendor to store the files needed for the project.
+2. The vendors file is related to phpmailer, which is used to send emails.
+3. The webiste now can send emails to the user to notify them of the pricee of the item they are bidding on.
+4. The following parts contains how to set up the environment for the project.
+5. Environment Setup:
+
+5. 1. Download and install Composer.
+Since I have already included the vendor folder with all necessary files in the project, there is no need to run additional commands.
+Composer website: https://getcomposer.org/
+
+5. 2. Next Steps:
+Locate the php.ini file at the following path:
+C:\xampp\php\php.ini
+Open the file and use Ctrl + F to search for the following keywords. Modify the parameters as shown below:
+[mail function]
+SMTP = smtp.gmail.com
+smtp_port = 587
+sendmail_from = you@example.com ; Set this to your email address
+sendmail_path = "\"C:\xampp\sendmail\sendmail.exe\" -t"
+
+5. 3. Go to your Google account and enable two-step verification.
+After enabling it, visit https://myaccount.google.com/apppasswords to generate a 16-digit app password. This is important; consider taking a screenshot to save it.
+
 
 14th commit
 ----------
@@ -36,7 +63,7 @@ Anqi Liu: mybids.php DONE
 
 Ninth Commit
 ----------
-York Tseng:
+Chao-Wei:
 1. change the email in buyer and seller to be unique so that the identical email can't register on the website
 2. register function is tested, and it's done
 
@@ -44,7 +71,7 @@ York Tseng:
 
 Eighth Commit
 ----------
-York Tseng:
+Chao-Wei:
 1. Added the registration function in `register.php` and `process_register.php`.
 2. Added a register button next to the login button on the main webpage, which can also call the registration function.
 3. Complemented the content of the Fourth Commit.
@@ -91,7 +118,7 @@ Jiayi: functions to create auctions for sellers.
 
 Fourth Commit
 ----------
-York Tseng: 
+Chao-Wei: 
 1. Finish login related function in the login result.php
 Thanks to Karina's help the password can Extract $_POST variables
 finish the request as the following content 
