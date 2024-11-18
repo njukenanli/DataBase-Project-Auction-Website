@@ -28,15 +28,23 @@ $user_email = $_SESSION['username'];
 $conn = ConnectDB();
 
 //perform a query to pull up the auctions they've bid on
-$sql = "
-SELECT Bid.bid_ID, Bid.item_ID, Item.description, COUNT(bid_ID) AS num_bids, Category.name AS title, MAX(Bid.bid_price) AS bid_price, Item.end_date
-FROM Buyer, Bid, Item, Category
-WHERE Buyer.user_ID = Bid.buyer_ID AND
-	Bid.item_ID = Item.item_ID AND
-    Item.category_ID = Category.category_ID AND
-	Buyer.email = ?
-GROUP BY item_ID
-ORDER BY bid_time DESC";
+$sql = "SELECT Bid.bid_ID,
+		Bid.item_ID,
+		Item.description,
+		(SELECT COUNT(*)FROM Bid AS b WHERE b.item_ID = Item.item_ID) AS num_bids,
+		Category.name AS title,
+		Item.end_date,
+		(SELECT GREATEST(
+			(SELECT starting_price FROM Item WHERE Bid.item_ID = Item.item_ID),
+			(SELECT COALESCE(MAX(bid_price), 0) FROM Bid WHERE Bid.item_ID = Item.item_ID)
+		)) AS bid_price
+	FROM Buyer, Bid, Item, Category
+	WHERE Buyer.user_ID = Bid.buyer_ID 		AND
+		Bid.item_ID = Item.item_ID 		AND
+    		Item.category_ID = Category.category_ID AND
+		Buyer.email = ?
+	GROUP BY item_ID
+	ORDER BY bid_time DESC";
 
 //pre-processing searching results, loop through results
 If ($stmt = $conn->prepare($sql)){
@@ -55,14 +63,13 @@ If ($stmt = $conn->prepare($sql)){
                     	$desc = $row['description'];
                     	$price = $row['bid_price'];
                     	$num_bids = $row['num_bids'];
-                    	$end_time = $row['end_date'];
+                    	$end_time = new DateTime($row['end_date']);
 			print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
 		}
 		echo "</ul>";
 	} else {
 		echo "<p> You have not bid on anything...</p>";
 	}
-
 	//disconnect with database
 	$stmt -> close();
 } else {
