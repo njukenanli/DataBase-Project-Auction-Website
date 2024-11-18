@@ -23,17 +23,25 @@
 	
 	//connect with the database
 	$conn = ConnectDB();
-
   // DONE: Perform a query to pull up auctions they might be interested in.
-	$sql = "SELECT Item.item_ID, Category.name AS title, Item.description, MAX(Bid.bid_price) AS bid_price, COUNT(Bid.bid_ID) AS num_bids, Item.end_date
+	$sql = "SELECT Item.item_ID,
+			Category.name AS title,
+			Item.description,
+			(SELECT COUNT(bid_ID) FROM Bid WHERE Bid.item_ID = Item.item_ID) AS num_bids,
+			Item.end_date,
+			(SELECT GREATEST(
+				(SELECT starting_price FROM Item WHERE Bid.item_ID = Item.item_ID),
+				(SELECT COALESCE(MAX(bid_price), 0) FROM Bid WHERE Bid.item_ID = Item.item_ID)
+			)) AS bid_price
 		FROM Bid, Item, Category, Buyer
 		WHERE Bid.item_ID IN (SELECT item_ID FROM Bid, Buyer WHERE Buyer.user_ID = Bid.buyer_ID AND Buyer.email = ?) AND
-      			Buyer.email != ? AND
+			Buyer.email != ? AND
 			Buyer.user_ID = Bid.buyer_ID AND
 			Bid.item_ID = Item.item_ID AND
 			Item.category_ID = Category.category_ID
-		GROUP BY Item.item_ID
-		ORDER BY bid_time DESC;";
+		GROUP BY Item.item_ID, Category.name, Item.description, Item.end_date
+		ORDER BY Item.end_date DESC;
+  		";
 	if($stmt = $conn->prepare($sql)){
 		$stmt->bind_param("ss", $user_email, $user_email);
 		$stmt->execute();
@@ -50,7 +58,7 @@
                     		$desc = $row['description'];
                     		$price = $row['bid_price'];
                     		$num_bids = $row['num_bids'];
-                    		$end_time = $row['end_date'];
+                    		$end_time = new DateTime($row['end_date']);
 				print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
 			}
 			echo "</ul>";
