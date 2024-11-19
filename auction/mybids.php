@@ -28,35 +28,24 @@ $user_email = $_SESSION['username'];
 $conn = ConnectDB();
 
 //perform a query to pull up the auctions they've bid on
-$sql = "SELECT Bid.bid_ID,
-		Bid.item_ID,
-		Item.description,
-		(SELECT COUNT(*)FROM Bid AS b WHERE b.item_ID = Item.item_ID) AS num_bids,
-		Category.name AS title,
-		Item.end_date,
-		(SELECT GREATEST(
-			(SELECT starting_price FROM Item WHERE Bid.item_ID = Item.item_ID),
-			(SELECT COALESCE(MAX(bid_price), 0) FROM Bid WHERE Bid.item_ID = Item.item_ID)
-		)) AS bid_price
-	FROM Buyer, Bid, Item, Category
-	WHERE Buyer.user_ID = Bid.buyer_ID 		AND
-		Bid.item_ID = Item.item_ID 		AND
-    		Item.category_ID = Category.category_ID AND
-		Buyer.email = ?
-	GROUP BY item_ID
-	ORDER BY bid_time DESC";
+$sql = "SELECT Item.item_ID, Item.title, Item.description, Bid.bid_price, Item.end_date,
+	(SELECT COUNT(*) FROM Bid JOIN Item ON Bid.item_ID = Item.item_ID) AS num_bids
+	FROM Buyer, Bid, Item
+	WHERE Buyer.email = ?			AND
+		Buyer.user_ID = Bid.buyer_ID	AND
+    		Bid.item_ID = Item.item_ID
+	GROUP BY Item.item_ID
+	ORDER BY Bid.bid_time DESC";
 
 //pre-processing searching results, loop through results
 If ($stmt = $conn->prepare($sql)){
 	$stmt->bind_param("s", $user_email);
 	$stmt->execute();
-
-	//get results
 	$result = $stmt->get_result();
+
+	//print out all the results if there is
 	if($result->num_rows > 0){
 		echo "<ul class = ‘list-group’>";
-
-		//print out all the results as list items
 		while ($row = $result -> fetch_assoc()){
 			$item_id = $row['item_ID'];
 			$title = $row['title'];
@@ -64,18 +53,23 @@ If ($stmt = $conn->prepare($sql)){
                     	$price = $row['bid_price'];
                     	$num_bids = $row['num_bids'];
                     	$end_time = new DateTime($row['end_date']);
+
+			//call print list function
 			print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
 		}
 		echo "</ul>";
 	} else {
+		//if there is no result, print out some hints
 		echo "<p> You have not bid on anything...</p>";
 	}
 	//disconnect with database
 	$stmt -> close();
 } else {
+	//if there is error when querying the database
 	echo "<p>Error querying the database.</p>";
 }
 $conn->close();
 ?>
 </div>
+
 <?php include_once("footer.php")?>
