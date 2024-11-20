@@ -1,6 +1,15 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
 
+
+17th commit
+----------
+
+Chao-Wei:
+
+solve issues within my_bid.php 
+2024.11.20 11:34
+
 16th commit
 ----------
 Karina:
