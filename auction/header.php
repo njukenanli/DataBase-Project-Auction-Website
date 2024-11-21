@@ -39,6 +39,8 @@ if (!isset($_SESSION['logged_in'])) {
   if ($_SESSION['logged_in'] == true) {
     echo '<p class="nav-link mb-0">Hello, ' . htmlspecialchars($_SESSION['username']) . ' | </p>';
     echo '<a class="nav-link" href="logout.php">Logout</a>';
+    echo '<a class="nav-link" href="extra_func/change_email.php">ChangeEmail</a>';
+    echo '<a class="nav-link" href="extra_func/change_password.php">ChangePassword</a>';
   } else {
     echo '<p class="nav-link mb-0">Welcome, guest | </p>';
     echo '<button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#loginModal">Login</button>';
@@ -111,6 +113,7 @@ if (!isset($_SESSION['logged_in'])) {
           <button type="submit" class="btn btn-primary form-control">Sign in</button>
         </form>
         <div class="text-center">or <a href="register.php">create an account</a></div>
+        <div class="text-center">or <a href="extra_func/change_password.php">forget password?</a></div>
       </div>
 
     </div>

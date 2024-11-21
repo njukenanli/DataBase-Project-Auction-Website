@@ -47,15 +47,28 @@
   if ($has_session) {
     $email = $_SESSION['username'];
     $role = $_SESSION['account_type'];
-    $sql =  "SELECT * FROM Watch, Buyer WHERE Watch.item_ID = " . $item_id 
-    . " AND Watch.buyer_ID = Buyer.user_ID AND Buyer.email = '" . $email . "'";
+    $sql =  "SELECT user_ID FROM $role WHERE email = $email";
     $result = $conn->query($sql);
     if ($result->num_rows > 0){
-      $watching = true;
+        $acc_id = $result->fetch_assoc()["user_ID"];
     }
-    else{
-      $watching = false;
+    else {
+        die("user not found...");
     }
+    if ($role === "buyer") {
+        $sql =  "SELECT * FROM Watch, Buyer WHERE Watch.item_ID = " . $item_id 
+        . " AND Watch.buyer_ID = Buyer.user_ID AND Buyer.email = '" . $email . "'";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0){
+          $watching = true;
+        }
+        else{
+          $watching = false;
+        }
+     }
+     else {
+        $watching = false;
+     }
   }
   else {
     $email =  '';
@@ -75,7 +88,7 @@
 <?php
   /* The following watchlist functionality uses JavaScript, but could
      just as easily use PHP as in other places in the code */
-  if ($now < $end_time):
+  if ($now < $end_time and $role === "buyer"):
 ?>
     <div id="watch_nowatch" <?php if ($has_session && $watching) echo('style="display: none"');?> >
       <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addToWatchlist()">+ Add to watchlist</button>
@@ -143,6 +156,8 @@ $sql = "SELECT seller_ID FROM Item WHERE item_ID = ". $item_id;
 $result = $conn->query($sql);
 if ($result->num_rows === 1) {
   $seller_id = $result->fetch_assoc()["seller_ID"];
+  if ($seller_id == $acc_id) {$is_seller = true;}
+  else {$is_seller = false;}
 }
 else {
   die("Wrong number of results:" . $result->num_rows);
@@ -168,9 +183,11 @@ else {
 echo "<br><br>Bidding History:<br>";
 $sql = "SELECT bid_time, buyer_ID, bid_price FROM Bid WHERE item_ID = $item_id ORDER BY bid_time DESC";
 $result = $conn->query($sql);
+$is_bidder = false;
 if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
     echo "Bid time: " . $row["bid_time"] . ", Buyer No." . $row["buyer_ID"] . ", bid_price: £" . $row["bid_price"] . "<br>";
+    if ($role == "buyer" and $row["buyer_ID"] == $acc_id) {$is_bidder = true;}
   }
 }
 else {
@@ -269,6 +286,26 @@ if ($now >= $end_time) :
   <?php endif ?>
 <?php endif ?>
 
+<? php
+if ($now < $end_time) {
+echo "<br><br><span style="color: red; font-weight: bold;">...Dangerous Zone...Deletion...</span><br>";
+if ($role == "buyer" and $is_bidder == true) {
+  echo "<br> you have bidded on this item, you can cancel your bid here.<br>";
+echo '<form method="post" action="extra_func/del_bid.php" style="display: inline;">
+            <input type="hidden" name="item_id" value="' . $item_id . '">
+            <input type="hidden" name="buyer_id" value="' . $acc_id . '">
+            <button type="submit" style="background-color: red; color: white; border: none; padding: 8px 16px; cursor: pointer;">Cancel Bid</button>
+          </form>';
+}
+if ($role == "seller" and $is_seller == true) {
+  ehco "<br> you are the seller of this item, you can cancel this auction here.<br>";
+  echo '<form method="post" action="extra_func/del_item.php" style="display: inline;">
+            <input type="hidden" name="item_id" value="' . $item_id . '">
+            <button type="submit" style="background-color: red; color: white; border: none; padding: 8px 16px; cursor: pointer;">Cancel Auction</button>
+          </form>';
+}
+}
+?>
   
   </div> <!-- End of right col with bidding info -->
 

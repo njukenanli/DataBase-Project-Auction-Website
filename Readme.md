@@ -1,6 +1,14 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
 
+18th commit
+----------
+
+Chao-Wei:
+1. upload the updated listing.php & header.php made by Karina 
+2. upload four files, change_email.php, change_password.php, del_bid.php and del_item.php, within extra funcs file for extera functions
+
+2024.11.21 2:51
 
 17th commit
 ----------
@@ -8,6 +16,7 @@ When committing each time, please add a note of the changes here. This would bec
 Chao-Wei:
 
 solve issues within my_bid.php 
+
 2024.11.20 11:34
 
 16th commit
