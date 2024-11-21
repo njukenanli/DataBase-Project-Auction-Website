@@ -2,14 +2,14 @@
 include_once("header.php");
 require("utilities.php");
 
-// Open a session to ensure access to session variables
+// Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
 echo '<div class="container my-5">';
 
-// Check whether the user has sales rights
+// Check if the user has seller privileges
 if (!isset($_SESSION['account_type']) || $_SESSION['account_type'] !== 'seller') {
     die("Only sellers can create auctions.");
 }
@@ -31,19 +31,21 @@ if (empty($title) || empty($category_name) || empty($starting_price) || empty($e
 }
 
 // Handle image upload
-$image_path = null;
-if (isset($_FILES['auctionImage']) && $_FILES['auctionImage']['error'] == UPLOAD_ERR_OK) {
-    $targetDir = "uploads/";  // Directory where the image will be saved
-    $targetFilePath = $targetDir . basename($_FILES["auctionImage"]["name"]);
-    
-    // Create the uploads directory if it doesn't exist
-    if (!is_dir($targetDir)) {
-        mkdir($targetDir, 0755, true);
+$image_path = null; // Default to null in case no image is uploaded
+if (isset($_FILES['auctionImage']) && $_FILES['auctionImage']['error'] === UPLOAD_ERR_OK) {
+    $upload_dir = "uploads/"; // Directory where images will be saved
+    $file_ext = pathinfo($_FILES['auctionImage']['name'], PATHINFO_EXTENSION); // Get file extension
+    $unique_file_name = uniqid("auction_", true) . '.' . $file_ext; // Generate unique file name
+    $target_file = $upload_dir . $unique_file_name;
+
+    // Create uploads directory if it doesn't exist
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0755, true);
     }
 
-    // Move the uploaded file to the target directory
-    if (move_uploaded_file($_FILES["auctionImage"]["tmp_name"], $targetFilePath)) {
-        $image_path = $targetFilePath;
+    // Move the uploaded file
+    if (move_uploaded_file($_FILES['auctionImage']['tmp_name'], $target_file)) {
+        $image_path = $target_file; // Store the file path for database insertion
     } else {
         die("Error uploading the image.");
     }
@@ -69,15 +71,17 @@ $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
-$seller_id = $user['user_ID'];
+$seller_id = $user['user_ID'] ?? null;
 
 if (!$seller_id) {
     die("User ID not found.");
 }
 
 // Insert new auction record, including image_path
-$insert_query = "INSERT INTO Item (title, description, seller_ID, category_ID, starting_price, reserve_price, end_date, image_path) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+$insert_query = "
+    INSERT INTO Item (title, description, seller_ID, category_ID, starting_price, reserve_price, end_date, image_path) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+";
 $stmt = $conn->prepare($insert_query);
 $stmt->bind_param("ssiiddss", $title, $details, $seller_id, $category_id, $starting_price, $reserve_price, $end_date, $image_path);
 
@@ -93,3 +97,4 @@ echo '</div>';
 
 include_once("footer.php");
 ?>
+
