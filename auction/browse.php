@@ -114,10 +114,11 @@ else {
 // Use the above values to construct a query statement
 $sql = "SELECT Item.item_ID AS item_id, Item.title AS title, 
         Item.description AS description, HighestBidPrice.price AS current_price, 
-        HighestBidPrice.num AS num_bids, Item.end_date AS end_date "
+        HighestBidPrice.num AS num_bids, Item.end_date AS end_date, Item.image_path AS image_path "
         . "FROM Item, HighestBidPrice, Category "
         . "WHERE " . join(" AND ", $condition) 
         . $order;
+
 
 $result = $conn->query($sql);
 
@@ -129,14 +130,18 @@ $list = array();
 
 if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
-    array_push($list, array($row["item_id"],
-                            $row["title"], 
-                            $row["description"], 
-                            floatval($row["current_price"]), 
-                            intval($row["num_bids"]), 
-                            new DateTime($row["end_date"])));
+    array_push($list, array(
+        $row["item_id"],
+        $row["title"], 
+        $row["description"], 
+        floatval($row["current_price"]), 
+        intval($row["num_bids"]), 
+        new DateTime($row["end_date"]),
+        $row["image_path"] 
+    ));
   }
 }
+
 ?>
 <div class="container mt-5">
 
@@ -156,7 +161,7 @@ $end = min($start + $results_per_page, $num_results);
 while($start < $end) {
     $item = $list[$start];
     // Use the function defined in utilities.php
-    print_listing_li($item[0], $item[1], $item[2], $item[3], $item[4], $item[5]);
+    print_listing_li($item[0], $item[1], $item[2], $item[3], $item[4], $item[5], $item[6]);
     $start++;
 }
 $conn->close();
@@ -221,6 +226,9 @@ if ($curr_page != $max_page) {
   </ul>
 </nav>
 
+</div>
+
+<?php include_once("footer.php")?>
 </div>
 
 <?php include_once("footer.php")?>
