@@ -25,44 +25,36 @@ function display_time_remaining($interval) {
 
 }
 
-// print_listing_li:
-// This function prints an HTML <li> element containing an auction listing
-function print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time)
-{
+function print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time, $image_path) {
   // Truncate long descriptions
   if (strlen($desc) > 250) {
     $desc_shortened = substr($desc, 0, 250) . '...';
-  }
-  else {
+  } else {
     $desc_shortened = $desc;
   }
-  
+
   // Fix language of bid vs. bids
-  if ($num_bids == 1) {
-    $bid = ' bid';
-  }
-  else {
-    $bid = ' bids';
-  }
-  
+  $bid = ($num_bids == 1) ? ' bid' : ' bids';
+
   // Calculate time to auction end
   $now = new DateTime();
-  if ($now > $end_time) {
-    $time_remaining = 'This auction has ended';
-  }
-  else {
-    // Get interval:
-    $time_to_end = date_diff($now, $end_time);
-    $time_remaining = display_time_remaining($time_to_end) . ' remaining';
-  }
-  
+  $time_remaining = ($now > $end_time) 
+    ? 'This auction has ended' 
+    : display_time_remaining(date_diff($now, $end_time)) . ' remaining';
+
   // Print HTML
-  echo('
-    <li class="list-group-item d-flex justify-content-between">
-    <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened . '</div>
-    <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>' . $num_bids . $bid . '<br/>' . $time_remaining . '</div>
-  </li>'
-  );
+  echo('<li class="list-group-item d-flex justify-content-between">');
+  echo('<div class="p-2 mr-5">');
+  if ($image_path && file_exists($image_path)) {
+    echo('<img src="' . htmlspecialchars($image_path) . '" alt="Item Image" style="max-width: 100px; max-height: 100px; margin-right: 10px;">');
+  } else {
+    // 显示默认图片
+    // echo('<img src="uploads/default_image.jpg" alt="Default Image" style="max-width: 100px; max-height: 100px; margin-right: 10px;">');
+  }
+  echo('<h5><a href="listing.php?item_id=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened);
+  echo('</div>');
+  echo('<div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>' . $num_bids . $bid . '<br/>' . $time_remaining . '</div>');
+  echo('</li>');
 }
 
 function ConnectDB($con_dir = "data/config.json"){
