@@ -52,7 +52,7 @@ if ($conn->query($sql) === FALSE) {
 // Select data from Item and temporary table HighestBidPrice
 $query = "
     SELECT i.item_ID, i.title, i.description, hbp.highest_bid,  
-           hbp.num_bids, i.end_date
+           hbp.num_bids, i.end_date,i.image_path
     FROM Item i
     LEFT JOIN HighestBidPrice hbp ON i.item_ID = hbp.item_ID
     WHERE i.seller_ID = ?
@@ -67,7 +67,7 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         // Assuming you have a print_listing_li function defined in utilities.php
          
-   print_listing_li($row['item_ID'], $row["title"], $row['description'], $row['highest_bid'], $row['num_bids'], new DateTime($row['end_date']));
+   print_listing_li($row['item_ID'], $row["title"], $row['description'], $row['highest_bid'], $row['num_bids'], new DateTime($row['end_date']),$row['image_path']);
     }
 } else {
     echo "You have no listings currently.";
