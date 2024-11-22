@@ -55,6 +55,7 @@ $sql = "SELECT Item.item_ID,
 		Item.title,
 		Item.description,
 		Item.end_date,
+                                Item.image_path,
 		(SELECT COUNT(bid_ID) FROM Bid WHERE Bid.item_ID = Item.item_ID) AS num_bids,
 		(SELECT GREATEST(
 			(SELECT starting_price FROM Item WHERE Bid.item_ID = Item.item_ID),
@@ -81,9 +82,10 @@ if($stmt = $conn->prepare($sql)){
                     	$price = $row['bid_price'];
                     	$num_bids = $row['num_bids'];
         		$end_time = new DateTime($row['end_date']);
+                                $image_path = $row['image_path'];
 
 			//Call print list function
-			print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
+			print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time,$image_path);
 		}
 		
 		echo "</ul>";
@@ -101,3 +103,4 @@ $conn->close();
 </div>
 
 <?php include_once("footer.php")?>
+
