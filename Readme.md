@@ -1,6 +1,13 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
 
+19th commit
+----------
+Chao-Wei:
+1. upload the updated del_bid.php & del_item.php files to extra funcs file
+2. watchers and sellers would receive an email when the products they are watching are deleted
+3. buyers and watchers would receive an email when the prices of products are changed i.e. someone deleted a bid, loweing the highest bid amount 
+
 18th commit
 ----------
 
