@@ -71,9 +71,9 @@ $stmt->close();
 // Notify all watchers about the change in the highest bid
 $title = "Update on Item #" . $item_id;
 if ($highest_bid === null || $highest_bid === 0) {
-    $content = "The item has no bids left. The starting price is now set to £" . $highest_bid . ".";
+    $content = "Due to cancellation of a bid, the item $item_id has no bids left. The starting price is now set to £" . $highest_bid . ".";
 } else {
-    $content = "The highest bid for the item is now £" . $highest_bid . ".";
+    $content = "Due to cancellation of a bid, the highest bid for the item $item_id is now £" . $highest_bid . ".";
 }
 
 // Loop through watchers and send emails

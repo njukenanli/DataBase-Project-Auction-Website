@@ -172,13 +172,13 @@ function watchingEmail($item_id, $new_price, $user_email) {
         if ($email === $user_email) {
             $subject = "Bid placed successfully";
             $message = "You have created a bid of £$new_price successfully on item $item_id.\n
-                        If you don't want to receive the notification on this item, go to listing page of this item add remove yourself from the watchlist. ";
+                        If you don't want to receive the notification on this item, go to listing page of this item and remove yourself from the watchlist. ";
             send_email($email, $receiver_name, $subject, $message);
         }
         else{
             $subject = "New bid on watched item";
             $message = "The item $item_id has a new bid of £$new_price. Place a higher bid to stay competitive!\n
-                        If you no longer want to receive the notification on this item, go to listing page of this item add remove yourself from the watchlist. ";
+                        If you no longer want to receive the notification on this item, go to listing page of this item and remove yourself from the watchlist. ";
 
             send_email($email, $receiver_name, $subject, $message);
         }
