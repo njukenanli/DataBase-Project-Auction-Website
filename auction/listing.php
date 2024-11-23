@@ -307,6 +307,7 @@ if ($now < $end_time) {
     
     // If the user role is buyer and has placed a bid
     if ($role == "buyer" && $is_bidder == true) {
+        echo "<br><br><br><span style='color: red; font-weight: bold;'>...Dangerous Zone...Deletion...</span><br>";
         echo "<br>You have bidded on this item, you can cancel your bid here.<br>";
         echo '<form method="post" action="extra_func/del_bid.php" style="display: inline;">
                 <input type="hidden" name="item_id" value="' . $item_id . '">
@@ -317,6 +318,7 @@ if ($now < $end_time) {
 
     // If the user role is seller and is the seller of this item
     if ($role == "seller" && $is_seller == true) {
+        echo "<br><br><br><span style='color: red; font-weight: bold;'>...Dangerous Zone...Deletion...</span><br>";
         echo "<br>You are the seller of this item, you can cancel this auction here.<br>";
         echo '<form method="post" action="extra_func/del_item.php" style="display: inline;">
                 <input type="hidden" name="item_id" value="' . $item_id . '">
