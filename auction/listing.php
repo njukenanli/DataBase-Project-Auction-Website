@@ -17,7 +17,7 @@
   if ($conn->query($sql) === FALSE) {
     die("Excution Failure: " . $conn->error);
   } 
-  $sql = "SELECT Item.title AS title, Item.description AS description, 
+  $sql = "SELECT Item.title AS title, Item.description AS description, Item.image_path AS image_path,
           HighestBidPrice.price AS current_price, HighestBidPrice.num AS num_bids, 
           Item.end_date AS end_date FROM Item, HighestBidPrice 
           WHERE Item.item_ID = HighestBidPrice.item_ID";
@@ -29,6 +29,8 @@
     $current_price = floatval($row["current_price"]);
     $num_bid = intval($row["num_bids"]);
     $end_time = new DateTime($row["end_date"]);
+    $image_path = $row["image_path"];
+
   }
   else {
     die("Wrong number of results:" . $result->num_rows);
@@ -112,6 +114,20 @@
 <div class="col-sm-8"> <!-- Left col with item info -->
 
   <div class="itemDescription">
+<div class="itemDescription">
+  <!-- product description -->
+  <p><?php echo($description); ?></p>
+
+  <!-- Commodity picture -->
+  <?php if (!empty($image_path)): ?>
+    <img src="<?php echo htmlspecialchars($image_path); ?>" 
+         alt="Item Image" 
+         class="img-thumbnail mt-3" 
+         style="max-width: 250px; height: auto;">
+  
+  <?php endif; ?>
+</div>
+
 
 <?php
 if ($now >= $end_time) {
@@ -174,7 +190,7 @@ if ($num > 0) {
     $sum += $row["rating"];
   }
   echo "<br>The average rating for this seller is: " . number_format($sum/$num, 2) . "/5.00, " . $num . " comment(s). <br>";
-  echo '<div class="p-2 mr-5"><h5><a href="extra_func/comment.php?seller_id=' . $seller_id . "&item_id=" . $item_id . '"> Click here to see more comments about this seller... </a></h5></div><br>';
+  echo '<div class="p-2 mr-5"><h5 style="margin-bottom: 0px;"><a href="extra_func/comment.php?seller_id=' . $seller_id . "&item_id=" . $item_id . '"> Click here to see more comments about this seller... </a></h5></div><br>';
 }
 else {
   echo "<br>No comment about this seller yet...<br>";
