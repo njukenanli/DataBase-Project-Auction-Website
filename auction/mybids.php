@@ -26,6 +26,7 @@ $sql = "SELECT
             Item.item_ID, 
             Item.title, 
             Item.description, 
+            Item.image_path,
             Item.end_date,
             COUNT(DISTINCT Bid.bid_ID) AS num_bids, -- Calculate total bids for the item
             MAX(CASE WHEN Buyer.email = ? THEN Bid.bid_price ELSE NULL END) AS my_bid_price -- Your bid price
@@ -58,9 +59,10 @@ if ($stmt = $conn->prepare($sql)) {
             $num_bids = $row['num_bids'];
             $price = $row['my_bid_price']; // Your bid price
             $end_time = new DateTime($row['end_date']);
+            $image_path = $row['image_path'];
 
             // Call print list function
-            print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
+            print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time,$image_path);
         }
         echo "</ul>";
     } else {
