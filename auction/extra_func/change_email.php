@@ -7,12 +7,22 @@
 <body> 
 
 <?php
-$require_once("../utilities.php");
+require_once("../utilities.php");
 
 function send_code($email) {
   # TODO: generate a random code and send it to the email adress.
+  # hint: send_email($email, $buyer_name, $subject, $message, '../email/config.json');
   return code;
 }
+
+session_start();
+if (! isset($_SESSION['username'])){
+  die("No user information found! This function should only work after logging in...");
+  header("refresh:5;url=../../index.php");
+  exit();
+}
+$old_email = $_SESSION['username'];
+
 
 $newEmailErr = "";
 $code_sent = "";
@@ -32,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     if (isset($_POST["submit"])) {
-        if (isset($_POST["code"] and $_POST["code"] === $code)) {
+        if (isset($_POST["code"]) and $_POST["code"] === $code) {
           #TODO: use session to get current email. use SQL to alter the user email in the buyer and/or seller table.
           $conn = ConnectDB("../data/config.json");
           $conn->close();
@@ -48,6 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!--TODO: create a form to let a user enter the new email address they use to substitute the old one.-->
 <form method="post" action="change_email.php"> 
+   current email: <?php echo $old_email;?>
+   <br><br>
    new email: <input type="text" name="new_email">
    <span class="error"><?php echo $newEmailErr ?></span>
    <br><br>

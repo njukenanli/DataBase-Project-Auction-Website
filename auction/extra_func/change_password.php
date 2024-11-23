@@ -7,10 +7,11 @@
 <body> 
 
 <?php
-$require_once("../utilities.php");
+require_once("../utilities.php");
 
 function send_code($email) {
   # TODO: generate a random code and send it to the email adress.
+  # hint: send_email($email, $buyer_name, $subject, $message, '../email/config.json');
   return code;
 }
 
@@ -23,13 +24,21 @@ $code_sent = "";
 $codeErr = "";
 $passwordErr = "";
 
+session_start();
+if (isset($_SESSION['logged_in']) and $_SESSION['logged_in']){
+  $old_email = $_SESSION['username'];
+}
+else{
+  $old_email = "";
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["send_code"])) {
+    if (isset($_POST["send_code"]) and !empty($_POST["send_code"])) {
         $email = $_POST["email"];
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $EmailErr = "Invalid email format";
         } 
-        elseif (!function email_in_database($email)) {
+        elseif (!email_in_database($email)) {
             $EmailErr = "Email not Registered!";
         }
         else {
@@ -38,8 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     if (isset($_POST["submit"])) {
-        if (isset($_POST["code"] and $_POST["code"] === $code)) {
-          if (isset($_POST["password"]) and isset($_POST["password_repeat"]) and $_POST["password"] === $_POST["password_repeat"])) {
+        if (isset($_POST["code"]) and $_POST["code"] === $code) {
+          if (isset($_POST["password"]) and isset($_POST["password_repeat"]) and $_POST["password"] === $_POST["password_repeat"]) {
               #TODO: use SQL to alter the password in buyer and/or seller table.
               $conn = ConnectDB("../data/config.json");
               $conn->close();
@@ -65,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!--TODO: create a form to let a user enter the new email address they use to substitute the old one.-->
 <form method="post" action="change_password.php"> 
-   user email: <input type="text" name="email">
+   user email: <input type="text" name="email" value = <?php echo $old_email;?>>
    <span class="error"><?php echo $EmailErr ?></span>
    <br><br>
    new password: <input type="text" name="password">
