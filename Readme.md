@@ -1,19 +1,23 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
 
-19th commit
+20th commit
 ----------
 Chao-Wei:
 1. upload the updated del_bid.php & del_item.php files to extra funcs file
 2. watchers and sellers would receive an email when the products they are watching are deleted
 3. buyers and watchers would receive an email when the prices of products are changed i.e. someone deleted a bid, loweing the highest bid amount 
 
+19th commit
+----------
+Jiayi: finished deletion ops in del_bid.php & del_item.php. TODO: send email notifications.
+
 18th commit
 ----------
 
 Chao-Wei:
 1. upload the updated listing.php & header.php made by Karina 
-2. upload four files, change_email.php, change_password.php, del_bid.php and del_item.php, within extra funcs file for extera functions
+2. upload four files, change_email.php, change_password.php, del_bid.php and del_item.php by Karina, within extra funcs file for extra functions
 
 2024.11.21 2:51
 
