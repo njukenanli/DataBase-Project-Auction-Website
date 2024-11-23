@@ -50,11 +50,44 @@ if ($highest_bid === null) {
     $stmt->close();
 }
 
-// TODO: Retrieve the email addresses of all buyers watching the item
+// Retrieve the email addresses of all buyers watching the item
+$sql = "SELECT buyer.email 
+        FROM Watch 
+        INNER JOIN buyer ON watch.buyer_ID = buyer.user_ID 
+        WHERE watch.item_ID = ?";
+$stmt = $conn->prepare($sql);
+if (!$stmt) {
+    die("SQL statement preparation failed: " . $conn->error);
+}
+$stmt->bind_param("i", $item_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$watchers = [];
+while ($row = $result->fetch_assoc()) {
+    $watchers[] = $row;
+}
+$stmt->close();
 
-// TODO: if the bid in the database is the highest bid of this item, send an email to all the buyers in the watchlist about the change of the highest price, and the new highest bid price of this item (could be no bid left, be careful!)
+// Notify all watchers about the change in the highest bid
+$title = "Update on Item #" . $item_id;
+if ($highest_bid === null || $highest_bid === 0) {
+    $content = "The item has no bids left. The starting price is now set to £" . $highest_bid . ".";
+} else {
+    $content = "The highest bid for the item is now £" . $highest_bid . ".";
+}
 
-// HINT: send_email($buyer_email, $buyer_name, $title, $content, "../email/config.json");
+// Loop through watchers and send emails
+foreach ($watchers as $watcher) {
+    send_email(
+        $watcher['email'], 
+        $watcher['email'], 
+        $title, 
+        $content, 
+        "../email/config.json"
+    );
+}
+
 $conn->close();
-echo "bid deleted successfully, redirecting...";
+echo "Bid deleted successfully, redirecting...";
 header("refresh:5;url=../../index.php");
+?>
