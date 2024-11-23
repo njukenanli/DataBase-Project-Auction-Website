@@ -76,6 +76,7 @@
     $email =  '';
     $watching = false;
     $role = '';
+    $acc_id = '';
   }
 ?>
 
