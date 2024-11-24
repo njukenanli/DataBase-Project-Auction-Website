@@ -10,13 +10,40 @@
 require_once("../utilities.php");
 
 function send_code($email) {
-  # TODO: generate a random code and send it to the email adress.
+  # DONE: generate a random code and send it to the email adress.
   # hint: send_email($email, $buyer_name, $subject, $message, '../email/config.json');
-  return code;
+  $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  $code = '';
+  for($i = 0; $i < 4; $i++){
+    $code .= $characters[rand(0, strlen( $characters ) -1)];
+  }
+
+  $_SESSION['code'] = $code;
+  $subject = "Your security code is: $code";
+  $message = "Your security code is: $code\nThis is a security code. Please don't disclose it to anyone!";
+  send_email($email, "Users changing email", $subject, $message, '../email/config.json');
+
+  return $code;
 }
 
 function email_in_database($email) {
-  # TODO: use SQL to check whether the email is in registered in the buyer or seller.
+  # DONE: use SQL to check whether the email is in registered in the buyer or seller.
+  $conn = ConnectDB("../data/config.json");
+  $sql = "SELECT email FROM Buyer WHERE email = ?
+          UNION
+          SELECT email FROM Seller WHERE email = ?";
+  
+  if ($stmt = $conn->prepare($sql)) {
+    $stmt->bind_param("ss", $email, $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    $conn->close();
+    
+    return $result->num_rows > 0;
+  }
+  $conn->close();
+  return false;
 }
 
 $EmailErr = "";
@@ -47,12 +74,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     if (isset($_POST["submit"])) {
-        if (isset($_POST["code"]) and $_POST["code"] === $code) {
+        if (isset($_POST["code"]) and $_POST["code"] === $_SESSION['code']) {
           if (isset($_POST["password"]) and isset($_POST["password_repeat"]) and $_POST["password"] === $_POST["password_repeat"]) {
-              #TODO: use SQL to alter the password in buyer and/or seller table.
+              #DONE: use SQL to alter the password in buyer and/or seller table.
+              $password = $_POST["password"];
+              $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
               $conn = ConnectDB("../data/config.json");
+
+              $sql1 = "UPDATE Buyer SET password = ? WHERE email = ?";
+              $sql1 = "UPDATE Seller SET password = ? WHERE email = ?";
+
+              if ($stmt = $conn->prepare($sql1)) {
+                $stmt->bind_param("ss", $hashed_password, $old_email);
+                $stmt->execute();
+                $stmt->close();
+              }
+
+              if ($stmt = $conn->prepare($sql2)) {
+              $stmt->bind_param("ss", $hashed_password, $old_email);
+              $stmt->execute();
+              $stmt->close();
+              }
+
               $conn->close();
               $success = "password changed successfully! please log in again! redirecting...";
+              echo $success;
+              //Let users relog in or log in using new password
               session_start();
               if (!isset($_SESSION['logged_in']) || (!$_SESSION['logged_in'])) {
                 header("refresh:5;url= ../../index.php");
