@@ -63,15 +63,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
           //Updating the user email
           $conn = ConnectDB("../data/config.json");
-          $sql = "UPDATE Buyer SET email = ? WHERE email = ?;
-                  UPDATE Seller SET email = ? WHERE email = ?";
-          if ($stmt = $conn->prepare($sql)) {
-            $stmt->bind_param("ssss", $newEmail, $user_email, $newEmail, $user_email);
-            $stmt->execute();
-            $stmt->close();
+          $sql1 = "UPDATE Buyer SET email = ? WHERE email = ?";
+          $sql2 = "UPDATE Seller SET email = ? WHERE email = ?";
+          if ($stmt = $conn->prepare($sql1)) {
+                $stmt->bind_param("ss", $newEmail, $user_email);
+                $stmt->execute();
+                $stmt->close();
           } else {
             die ("Error querying the database: " . $stmt->error);
           }
+
+          if ($stmt = $conn->prepare($sql2)) {
+                $stmt->bind_param("ss", $newEmail, $user_email);
+                $stmt->execute();
+                $stmt->close();
+          } else {
+            die ("Error querying the database: " . $stmt->error);
+          }
+          
           $conn->close();
           $success = "email changed successfully! please log in again! redirecting...";
           echo $success;
