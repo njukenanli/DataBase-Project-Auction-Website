@@ -20,7 +20,7 @@ function send_code($email) {
 
   $subject = "Your security code is: $code";
   $message = "Your security code is: $code\nThis is a security code. Please don't disclose it to anyone!";
-  send_email($email, "Users changing email", $subject, $message);
+  send_email($email, "Users changing email", $subject, $message, '../email/config.json');
 
   return $code;
 }
