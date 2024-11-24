@@ -10,9 +10,19 @@
 require_once("../utilities.php");
 
 function send_code($email) {
-  # TODO: generate a random code and send it to the email adress.
+  # DONE: generate a random code and send it to the email adress.
   # hint: send_email($email, $buyer_name, $subject, $message, '../email/config.json');
-  return code;
+  $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  $code = '';
+  for($i = 0; $i < 4; $i++){
+    $code .= $characters[rand(0, strlen( $characters ) -1)];
+  }
+
+  $subject = "Your security code is: $code";
+  $message = "Your security code is: $code\nThis is a security code. Please don't disclose it to anyone!";
+  send_email($email, "Users changing email", $subject, $message);
+
+  return $code;
 }
 
 session_start();
@@ -34,20 +44,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // so no need to check wehther the email has been registered.
     if (isset($_POST["send_code"])) {
         $newEmail = $_POST["new_email"];
-        if (!filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
+        if(empty($_POST["new_email"])){
+           $newEmailErr = "Email is required!";
+        }elseif (!filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
             $newEmailErr = "Invalid email format";
         } else {
             $code = send_code($newEmail); // Generate and send the code
+            $_SESSION['code'] = $code;
+            $_SESSION['new_email'] = $newEmail;
             $code_sent = "Verification code sent to $newEmail";
         }
     }
     if (isset($_POST["submit"])) {
-        if (isset($_POST["code"]) and $_POST["code"] === $code) {
-          #TODO: use session to get current email. use SQL to alter the user email in the buyer and/or seller table.
+        if (isset($_POST["code"]) and $_POST["code"] === $_SESSION['code']) {
+          #DONE: use session to get current email. use SQL to alter the user email in the buyer and/or seller table.
+          $user_email = $_SESSION['username'];
+          $newEmail = $_SESSION['new_email'];
+
+          //Updating the user email
           $conn = ConnectDB("../data/config.json");
+          $sql = "UPDATE Buyer SET email = ? WHERE email = ?;
+                  UPDATE Seller SET email = ? WHERE email = ?";
+          if ($stmt = $conn->prepare($sql)) {
+            $stmt->bind_param("ssss", $newEmail, $user_email, $newEmail, $user_email);
+            $stmt->execute();
+            $stmt->close();
+          } else {
+            die ("Error querying the database: " . $stmt->error);
+          }
           $conn->close();
           $success = "email changed successfully! please log in again! redirecting...";
+          echo $success;
           header("refresh:5;url=../logout.php");
+          exit();
         }
         else {
           $codeErr = "verification code is wrong.";
