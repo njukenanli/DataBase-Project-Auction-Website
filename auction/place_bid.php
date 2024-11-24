@@ -167,7 +167,7 @@ function watchingEmail($item_id, $new_price, $user_email) {
 
     while ($row = $result->fetch_assoc()) {
         $email = $row['email'];
-        echo $email;
+        //echo $email;
         $receiver_name = "User " . $row['user_ID'];
         if ($email === $user_email) {
             $subject = "Bid placed successfully";

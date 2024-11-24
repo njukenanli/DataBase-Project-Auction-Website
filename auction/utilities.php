@@ -90,7 +90,7 @@ function send_email($receiver_email, $receiver_name, $subject, $message, $email_
       $mail->Body    = $message; 
 
       $mail->send();
-      echo "Email sent to: $receiver_email<br>";
+      //echo "Email sent to: $receiver_email<br>";
   } catch (Exception $e) {
       echo "Email could not be sent. Mailer Error: {$mail->ErrorInfo}<br>";
   }

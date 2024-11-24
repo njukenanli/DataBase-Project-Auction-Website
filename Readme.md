@@ -1,6 +1,22 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
 
+21st commit
+----------
+Karina:
+
+Inquiry functions DONE
+
+Buyers can make enquiries toward sellers about an item in the detailed listing page of an item. The seller of the item would receive an email of the question. Buyers can see all Q&As about an item on the detailed listing page of that item.
+
+Sellers can browse all the enquires made on their items in "My Enquiries". Sellers can answer questions about enquiries after clicking on the enquiry links in "My Enquiries". The answers would be sent to enquirers by email.
+
+@ auction/  myenquiries.php 
+@ auction/extra_func/  seller_enquiry.php, buyer_enquiry.php, process_enquiry.php, process_answer.php
+
+2024.11.24
+
+
 20th commit
 ----------
 Chao-Wei:
@@ -10,7 +26,11 @@ Chao-Wei:
 
 19th commit
 ----------
-Jiayi: finished deletion ops in del_bid.php & del_item.php. TODO: send email notifications.
+Jiayi: 
+
+now pictures of items can be added when creating auctions and can be shown in the browse page and the item detail page
+
+finished deletion ops in del_bid.php & del_item.php. TODO: send email notifications.
 
 18th commit
 ----------
@@ -245,7 +265,11 @@ conditions and features of the items including the item description, categorisat
 
 **Extra Functions:**
 
-√ E7. 
+√ E7. Inqury and Comment
+
+Buyers can make enquiries toward sellers about an item. The seller of the item would receive an email of the question. Buyers can see all Q&As about an item on the detailed listing page of that item.
+
+Sellers can browse all the enquires made on their items. Sellers can answer questions about enquiries. The answers would be sent to enquirers by email.
 
 Buyers who won the auction can make comments and ratings on the deal they made. 
 
@@ -253,9 +277,17 @@ Other Users are able to see the comment on a sold item.
 
 Other Users are able to see all the comments on a seller's items sold and the average rating of a seller's items sold.
 
-⚪ E8. 
+√ E8. Item Picture
 
 Sellers can add pictures to the items they sell when creating auctions.
 
-Users can see the pictures of the items (if available) in the listing.php by clicking the items in the index page.
+Users can see the pictures of the items (if available) in the browse.php, and listing.php by clicking the items in the index page.
+
+√ E9 Deletion of Bids and Items
+
+Sellers can cancel their auctions. Emails would be sent to all buyers watching the cancelled item.
+
+Buyers can cancel their bids. Emails would be sent to all buyers watching the item if the highest bid changes due to cancellation.
+
+E10 Change Email and Password
 

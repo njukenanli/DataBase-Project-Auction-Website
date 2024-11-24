@@ -107,10 +107,6 @@
 <div class="row"> <!-- Row #2 with auction description + bidding info -->
   <div class="col-sm-8"> <!-- Left col with item info -->
 
-    <div class="itemDescription">
-    <?php echo($description); ?>
-    </div>
-
   </div>
 <div class="col-sm-8"> <!-- Left col with item info -->
 
@@ -208,7 +204,28 @@ if ($result->num_rows > 0) {
   }
 }
 else {
-  echo "No bid found...";
+  echo "No bid found...<br>";
+}
+
+echo "<br><br>Enquiry about this item:<br>";
+$sql = "SELECT buyer_ID, enquiry, answer    FROM Enquiry   WHERE item_ID = $item_id    ORDER BY  enquiry_time DESC";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+  while($row = $result->fetch_assoc()) {
+    echo "Buyer No." . $row["buyer_ID"] . ", enquiry:" . $row["enquiry"] . "<br>";
+    echo "Answer from seller:" . $row["answer"] . "<br><br>";
+  }
+}
+else {
+  echo "No enquiry found...<br><br>";
+}
+if ($now < $end_time) {
+  if ($role == "buyer") {
+  echo '<h5><a href="extra_func/buyer_enquiry.php?item_id=' . $item_id . '&buyer_id=' . $acc_id . '">Click here to make enquiry to the seller about this item.</a></h5>';
+  }
+  else {
+    echo "Before this auction ends, you can log in as a buyer to make enquiry to the seller about this item.<br><br>";
+  }
 }
 ?>
 
@@ -241,7 +258,7 @@ if ($now >= $end_time) :
         echo $comment . "<br>";
         if ($has_session and $email === $winner and $role === "buyer") {
               echo "<br>You are the winner of this auction, you can edit comment here!<br>";
-              echo '<form method="post" action="extra_func/process_comment.php">
+              echo '<form id="commentForm" method="post" action="extra_func/process_comment.php">
                     <div class="form-group">
                       <label>item_id:</label>
                       <select class="form-control" id="item_id" name="item_id">
@@ -288,7 +305,7 @@ if ($now >= $end_time) :
 
   <?php if ($role === "buyer"): ?>
     <!-- Bidding form -->
-    <form method="POST" action="place_bid.php">
+    <form id="bidForm" method="POST" action="place_bid.php">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text">£</span>
@@ -310,7 +327,7 @@ if ($now < $end_time) {
     if ($role == "buyer" && $is_bidder == true) {
         echo "<br><br><br><span style='color: red; font-weight: bold;'>...Dangerous Zone...Deletion...</span><br>";
         echo "<br>You have bidded on this item, you can cancel your bid here.<br>";
-        echo '<form method="post" action="extra_func/del_bid.php" style="display: inline;">
+        echo '<form id="delbidForm" method="post" action="extra_func/del_bid.php" style="display: inline;">
                 <input type="hidden" name="item_id" value="' . $item_id . '">
                 <input type="hidden" name="buyer_id" value="' . $acc_id . '">
                 <button type="submit" style="background-color: red; color: white; border: none; padding: 8px 16px; cursor: pointer;">Cancel Bid</button>
@@ -321,7 +338,7 @@ if ($now < $end_time) {
     if ($role == "seller" && $is_seller == true) {
         echo "<br><br><br><span style='color: red; font-weight: bold;'>...Dangerous Zone...Deletion...</span><br>";
         echo "<br>You are the seller of this item, you can cancel this auction here.<br>";
-        echo '<form method="post" action="extra_func/del_item.php" style="display: inline;">
+        echo '<form id="delitemForm" method="post" action="extra_func/del_item.php" style="display: inline;">
                 <input type="hidden" name="item_id" value="' . $item_id . '">
                 <button type="submit" style="background-color: red; color: white; border: none; padding: 8px 16px; cursor: pointer;">Cancel Auction</button>
               </form>';

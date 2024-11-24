@@ -53,4 +53,15 @@ CREATE TABLE Comment (
     comment VARCHAR(200) DEFAULT 'No comment yet...',
     rating DECIMAL(2,1) DEFAULT -1.0,
     FOREIGN KEY (item_ID) REFERENCES Item(item_id)
+);
+
+CREATE TABLE Enquiry (
+    enquiry_ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    enquiry_time TIMESTAMP NOT NULL,
+    item_ID INT(6) UNSIGNED,
+    buyer_ID INT(6) UNSIGNED,
+    enquiry VARCHAR(200) NOT NULL,
+    answer VARCHAR(200) DEFAULT 'No answer yet...',
+    FOREIGN KEY (item_ID) REFERENCES Item(item_id),
+    FOREIGN KEY (buyer_ID) REFERENCES Buyer(user_ID)
 )
