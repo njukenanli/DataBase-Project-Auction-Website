@@ -18,10 +18,9 @@ function send_code($email) {
     $code .= $characters[rand(0, strlen( $characters ) -1)];
   }
 
-  $_SESSION['code'] = $code;
   $subject = "Your security code is: $code";
-  $message = "Your security code is: $code\nThis is a security code. Please don't disclose it to anyone!";
-  send_email($email, "Users changing email", $subject, $message, '../email/config.json');
+  $message = "Your security code is: $code This is a security code. \nPlease don't disclose it to anyone!";
+  send_email($email, "Users changing password", $subject, $message, '../email/config.json');
 
   return $code;
 }
@@ -35,13 +34,21 @@ function email_in_database($email) {
   
   if ($stmt = $conn->prepare($sql)) {
     $stmt->bind_param("ss", $email, $email);
-    $stmt->execute();
+    if(!$stmt->execute()){
+      die("Execution error: " . $stmt->error);
+      $stmt->close();
+      $conn->close();
+      return false;
+    }
+
     $result = $stmt->get_result();
+    $exist = $result->num_rows > 0;
     $stmt->close();
     $conn->close();
-    
-    return $result->num_rows > 0;
+    return $exist;
+
   }
+
   $conn->close();
   return false;
 }
@@ -60,9 +67,13 @@ else{
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["send_code"]) and !empty($_POST["send_code"])) {
-        $email = $_POST["email"];
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if (isset($_POST["send_code"])) {
+      $email = $_POST["email"];
+
+        if (empty($_POST['email'])){
+          $EmailErr = "Email is required!";
+        } 
+        elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)){
             $EmailErr = "Invalid email format";
         } 
         elseif (!email_in_database($email)) {
@@ -70,9 +81,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         else {
             $code = send_code($email); // Generate and send the code
+            $_SESSION['code'] = $code;
             $code_sent = "Verification code sent to $email";
         }
     }
+
     if (isset($_POST["submit"])) {
         if (isset($_POST["code"]) and $_POST["code"] === $_SESSION['code']) {
           if (isset($_POST["password"]) and isset($_POST["password_repeat"]) and $_POST["password"] === $_POST["password_repeat"]) {
@@ -83,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               $conn = ConnectDB("../data/config.json");
 
               $sql1 = "UPDATE Buyer SET password = ? WHERE email = ?";
-              $sql1 = "UPDATE Seller SET password = ? WHERE email = ?";
+              $sql2 = "UPDATE Seller SET password = ? WHERE email = ?";
 
               if ($stmt = $conn->prepare($sql1)) {
                 $stmt->bind_param("ss", $hashed_password, $old_email);
@@ -98,10 +111,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               }
 
               $conn->close();
+
               $success = "password changed successfully! please log in again! redirecting...";
               echo $success;
               //Let users relog in or log in using new password
-              session_start();
               if (!isset($_SESSION['logged_in']) || (!$_SESSION['logged_in'])) {
                 header("refresh:5;url= ../../index.php");
               }
