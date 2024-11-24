@@ -1,6 +1,18 @@
 # Contribution History #
 When committing each time, please add a note of the changes here. This would become a reference point of mutual evaluation...
 
+22st commit
+----------
+Anqi:
+
+Change password/email functions DONE
+
+Users can change their password and email at browse page, through clicking the top button "ChangeEmail" or "ChangePassword"
+Users will receive the verifiction code to verify their authentication.
+Once their changed their password or email, it will logout automatically. Users have to log in again.
+
+2024.11.24
+
 21st commit
 ----------
 Karina:
