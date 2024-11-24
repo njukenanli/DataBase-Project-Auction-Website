@@ -11,6 +11,9 @@ Users can change their password and email at browse page, through clicking the t
 Users will receive the verifiction code to verify their authentication.
 Once their changed their password or email, it will logout automatically. Users have to log in again.
 
+@auction/extra_func/change_password.php
+@auction/extra_func/change_email.php
+
 2024.11.24
 
 21st commit
