@@ -304,5 +304,5 @@ Sellers can cancel their auctions. Emails would be sent to all buyers watching t
 
 Buyers can cancel their bids. Emails would be sent to all buyers watching the item if the highest bid changes due to cancellation.
 
-E10 Change Email and Password
+√ 10 Change Email and Password
 
