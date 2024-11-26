@@ -306,3 +306,8 @@ Buyers can cancel their bids. Emails would be sent to all buyers watching the it
 
 √ 10 Change Email and Password
 
+Users can change email to a new one after logging in and sending a verification code to the new email to be set.
+
+Users can change password by sending a verification code to the registered email address.
+
+
