@@ -280,11 +280,13 @@ conditions and features of the items including the item description, categorisat
 
 **Extra Functions:**
 
-√ E7. Inqury and Comment
+√ E7. Inqury
 
 Buyers can make enquiries toward sellers about an item. The seller of the item would receive an email of the question. Buyers can see all Q&As about an item on the detailed listing page of that item.
 
 Sellers can browse all the enquires made on their items. Sellers can answer questions about enquiries. The answers would be sent to enquirers by email.
+
+√ E8. Comment
 
 Buyers who won the auction can make comments and ratings on the deal they made. 
 
@@ -292,19 +294,19 @@ Other Users are able to see the comment on a sold item.
 
 Other Users are able to see all the comments on a seller's items sold and the average rating of a seller's items sold.
 
-√ E8. Item Picture
+√ E9. Item Picture
 
 Sellers can add pictures to the items they sell when creating auctions.
 
 Users can see the pictures of the items (if available) in the browse.php, and listing.php by clicking the items in the index page.
 
-√ E9 Deletion of Bids and Items
+√ E10. Deletion of Bids and Items
 
 Sellers can cancel their auctions. Emails would be sent to all buyers watching the cancelled item.
 
 Buyers can cancel their bids. Emails would be sent to all buyers watching the item if the highest bid changes due to cancellation.
 
-√ 10 Change Email and Password
+√ E11. Change Email and Password
 
 Users can change email to a new one after logging in and sending a verification code to the new email to be set.
 

@@ -15,7 +15,9 @@ $user_email = $_SESSION['username'];
 
 <div class="container">
 
-<h2 class="my-3">My bids</h2>
+<h2>Recommendation</h2>
+You might want to bid on the sorts of things other people, who have also bid on the sorts of things you have previously bid on, are currently bidding on...<br>
+<h2> </h2>
 
 <?php
   // This page is for showing a user the auctions they've bid on.
