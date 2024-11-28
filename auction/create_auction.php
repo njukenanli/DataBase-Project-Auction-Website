@@ -42,6 +42,13 @@ if (!isset($_SESSION['account_type']) || $_SESSION['account_type'] !== 'seller')
                                 <option value="china">China</option>
                                 <option value="painting">Painting</option>
                                 <option value="sculpture">Sculpture</option>
+                                <option value="Calligraphy">Calligraphy</option>
+                                <option value="Stamps">Stamps</option>
+                                <option value="Coins">Coins</option>
+                                <option value="Jewelry">Jewelry</option>
+                                <option value="Collectible Toys">Collectible Toys</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Others">Others</option>
                             </select>
                             <small id="categoryHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Select a category for this item.</small>
                         </div>
