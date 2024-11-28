@@ -13,6 +13,19 @@ INSERT INTO Category (name)
 VALUES ("painting");
 INSERT INTO Category (name)
 VALUES ("sculpture");
+VALUES ("Calligraphy");
+INSERT INTO Category (name)
+VALUES ("Stamps");
+INSERT INTO Category (name)
+VALUES ("Coins");
+INSERT INTO Category (name)
+VALUES ("Jewelry");
+INSERT INTO Category (name)
+VALUES ("Collectible Toys");
+INSERT INTO Category (name)
+VALUES ("Electronics");
+INSERT INTO Category (name)
+VALUES ("Others");
 
 INSERT INTO Item (title, description, seller_ID, category_ID, starting_price, reserve_price, end_date)
 VALUES ('china', 'Delicate china.', 1, 1, 10.0, 12.0, "2026-03-04");
