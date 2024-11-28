@@ -35,6 +35,13 @@ require("utilities.php");
           <option value="china">china</option>
           <option value="painting">painting</option>
           <option value="sculpture">sculpture</option>
+          <option value="Calligraphy">Calligraphy</option>
+          <option value="Stamps">Stamps</option>
+          <option value="Coins">Coins</option>
+          <option value="Jewelry">Jewelry</option>
+          <option value="Collectible Toys">Collectible Toys</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Others">Others</option>
         </select>
       </div>
     </div>
