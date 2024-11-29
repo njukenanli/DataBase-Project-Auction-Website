@@ -78,6 +78,8 @@ Our program design strictly follows the Entity-Relationship design and follows t
 ### Entity-Relationship Diagram ###
 ![ER Diagram](./materials/Entity-Relationship-Diagram.png)
 
+Note: Entities and Relations related to Basic/Core Functionalities are marked with solid lines; those related to extra functionalities with dotted lines.
+
 ### Logical Design ###
 ![Logical Design](./materials/Logical-Design.png)
 
