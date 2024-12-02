@@ -3,7 +3,7 @@ This is a mock auction program running at the server end.
 The main languages involved are **PHP, SQL, CSS/HTML/JS**.
 
 ## Video Demo ##
-Display video will be coming soon...
+Display Video of our Program : https://youtu.be/lRaR3d5fOsc
 
 ## Core Functionality of this Program ##
 √ 1. Users can register with the system and create accounts. Users have roles of seller or buyer with different privileges.
